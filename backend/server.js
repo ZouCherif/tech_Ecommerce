@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/register", require("./routes/register"));
+app.use("/login", require("./routes/auth"));
 
 app.all("*", (req, res) => {
   res.status(404);
