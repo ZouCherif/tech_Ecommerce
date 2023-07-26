@@ -9,6 +9,7 @@ const corsOptions = require("./config/corsOptions");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
+const verifyJWT = require("./middlewares/verifyJWT");
 
 connectDB();
 
@@ -21,6 +22,8 @@ app.use("/register", require("./routes/register"));
 app.use("/login", require("./routes/auth"));
 app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
+
+// app.use(verifyJWT)
 
 app.all("*", (req, res) => {
   res.status(404);
