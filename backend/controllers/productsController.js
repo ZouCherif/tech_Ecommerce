@@ -1,17 +1,24 @@
 const Product = require("../models/Product");
 
 const getAllProducts = async (req, res) => {
-  const products = Product.find();
-  if (!products) return res.status(204).json({ message: "No products found." });
-  res.json(products);
+  try {
+    const products = await Product.find();
+    if (products.length === 0) {
+      return res.status(404).json({ message: "No products found." });
+    }
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving products." });
+  }
 };
 
-const addNewProduct = (req, res) => {
+const addNewProduct = async (req, res) => {
   const { name, description, price, category, sizes, colors, stock } = req.body;
   if (!name || !description || !price || !category || !sizes || !colors)
     return res.status(400).json({ message: "all informations are required" });
   try {
-    const result = Product.create({
+    const result = await Product.create({
       name,
       description,
       price,
@@ -40,7 +47,7 @@ const updateProduct = async (req, res) => {
   product.colors = colors;
   product.stock = stock;
 
-  const result = product.save();
+  const result = await product.save();
   result.json(product);
 };
 
