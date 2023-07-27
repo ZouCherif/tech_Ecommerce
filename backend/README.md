@@ -109,14 +109,3 @@ PUT /api/admin/orders/:orderId: Update the status of an order (admin only, prote
 5. User Reviews and Ratings:
 
 POST /api/products/:productId/reviews: Add a review and rating for a product (protected route with JWT authentication).
-
-{
-"firstName": "me",
-"lastName": "me",
-"username": "matrix",
-"email": "matrix@gmail.com",
-"pwd": "me123$",
-    "pwdC": "me123$",
-"phoneNumber": "0550555555",
-"address": "annaba"
-}
