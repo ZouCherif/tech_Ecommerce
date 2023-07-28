@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 
 const getAllProducts = async (req, res) => {
   try {
@@ -14,15 +15,19 @@ const getAllProducts = async (req, res) => {
 };
 
 const addNewProduct = async (req, res) => {
-  const { name, description, price, category, sizes, colors, stock } = req.body;
-  if (!name || !description || !price || !category || !sizes || !colors)
+  const { name, description, price, categoryName, sizes, colors, stock } =
+    req.body;
+  if (!name || !description || !price || !categoryName || !sizes || !colors)
     return res.status(400).json({ message: "all informations are required" });
   try {
+    const category = await Category.findOne({ name: categoryName }).exec();
+    if (!category)
+      return json.status(404).json({ message: "Category not found" });
     const result = await Product.create({
       name,
       description,
       price,
-      category,
+      category: category._id,
       sizes,
       colors,
       stock,
@@ -34,40 +39,60 @@ const addNewProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  const { name, description, price, category, sizes, colors, stock } = req.body;
-  if (!name || !description || !price || !category || !sizes || !colors)
-    return res.status(400).json({ message: "all informations are required" });
-  const product = await Product.findOne({ _id: req.params.id }).exec();
-  if (!product) return res.status(400).json({ message: "product not found" });
-  product.name = name;
-  product.description = description;
-  product.price = price;
-  product.category = category;
-  product.sizes = sizes;
-  product.colors = colors;
-  product.stock = stock;
-
-  const result = await product.save();
-  result.json(product);
+  const { name, description, price, categoryName, sizes, colors, stock } =
+    req.body;
+  if (!name || !description || !price || !categoryName || !sizes || !colors)
+    return res.status(400).json({ message: "All information is required." });
+  try {
+    const product = await Product.findOne({ _id: req.params.id }).exec();
+    if (!product)
+      return res.status(404).json({ message: "Product not found." });
+    const category = await Category.findOne({ name: categoryName }).exec();
+    if (!category)
+      return res.status(404).json({ message: "Category not found." });
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    product.category = category._id;
+    product.sizes = sizes;
+    product.colors = colors;
+    product.stock = stock;
+    const result = await product.save();
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error updating product." });
+  }
 };
 
 const deleteProduct = async (req, res) => {
-  const product = await Product.findOne({ _id: req.params.id }).exec();
-  if (!product) return res.status(404).json({ message: "product not found" });
-  const result = await Product.deleteOne();
-  res.json(result);
+  try {
+    const product = await Product.findOne({ _id: req.params.id }).exec();
+    if (!product)
+      return res.status(404).json({ message: "Product not found." });
+    const result = await product.deleteOne();
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting product." });
+  }
 };
 
 const getProduct = async (req, res) => {
-  if (!req?.params?.id)
-    return res.status(400).json({ message: "product ID required." });
-  const product = await Product.findOne({ _id: req.params.id }).exec();
-  if (!product) {
-    return res
-      .status(204)
-      .json({ message: `No product matches ID ${req.params.id}.` });
+  try {
+    if (!req?.params?.id)
+      return res.status(400).json({ message: "product ID required." });
+    const product = await Product.findOne({ _id: req.params.id }).exec();
+    if (!product) {
+      return res
+        .status(204)
+        .json({ message: `No product matches ID ${req.params.id}.` });
+    }
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error geting product." });
   }
-  res.json(product);
 };
 
 module.exports = {
