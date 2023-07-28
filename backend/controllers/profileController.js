@@ -3,8 +3,9 @@ const User = require("../models/User");
 // Get user profile
 const getUserProfile = async (req, res) => {
   try {
-    const email = req.email;
-    const user = await User.findOne({ email }).select(
+    const userId = req.userId;
+    console.log(userId);
+    const user = await User.findById(userId).select(
       "-password -refreshToken -active -__v"
     );
     if (!user) {
@@ -20,10 +21,10 @@ const getUserProfile = async (req, res) => {
 // Update user profile
 const updateUserProfile = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const { fistName, lastName, username, phoneNumber, address } = req.body;
+    const userId = req.userId;
+    const { firstName, lastName, username, phoneNumber, address } = req.body;
     const updatedFields = {
-      fistName,
+      firstName,
       lastName,
       username,
       phoneNumber,
