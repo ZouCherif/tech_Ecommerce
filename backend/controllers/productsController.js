@@ -9,7 +9,8 @@ const getAllProducts = async (req, res) => {
     const filter = {};
 
     if (category) {
-      filter.category = category;
+      const categoryId = await Category.find({ name: category }).select("_id");
+      filter.category = categoryId;
     }
     if (minPrice && maxPrice) {
       filter.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
@@ -29,9 +30,11 @@ const getAllProducts = async (req, res) => {
 
     if (search) {
       // Use regular expression for case-insensitive search
+      const regexSearch = new RegExp(search, "i");
+
       filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
+        { name: { $regex: regexSearch } },
+        { description: { $regex: regexSearch } },
       ];
     }
 
