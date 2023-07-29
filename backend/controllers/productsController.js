@@ -3,7 +3,40 @@ const Category = require("../models/Category");
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { category, minPrice, maxPrice, size, color, search } = req.query;
+
+    // Construct the filter object based on the query parameters
+    const filter = {};
+
+    if (category) {
+      filter.category = category;
+    }
+    if (minPrice && maxPrice) {
+      filter.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
+    } else if (minPrice) {
+      filter.price = { $gte: Number(minPrice) };
+    } else if (maxPrice) {
+      filter.price = { $lte: Number(maxPrice) };
+    }
+
+    if (size) {
+      filter.sizes = size;
+    }
+
+    if (color) {
+      filter.colors = color;
+    }
+
+    if (search) {
+      // Use regular expression for case-insensitive search
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const products = await Product.find(filter);
+
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found." });
     }
@@ -13,6 +46,19 @@ const getAllProducts = async (req, res) => {
     res.status(500).json({ message: "Error retrieving products." });
   }
 };
+
+// const getAllProducts = async (req, res) => {
+//   try {
+//     const products = await Product.find();
+//     if (products.length === 0) {
+//       return res.status(404).json({ message: "No products found." });
+//     }
+//     res.json(products);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error retrieving products." });
+//   }
+// };
 
 const addNewProduct = async (req, res) => {
   const { name, description, price, categoryName, sizes, colors, stock } =

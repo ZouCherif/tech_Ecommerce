@@ -9,7 +9,6 @@ const corsOptions = require("./config/corsOptions");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
-const verifyJWT = require("./middlewares/verifyJWT");
 
 connectDB();
 
