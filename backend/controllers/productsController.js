@@ -3,9 +3,9 @@ const Category = require("../models/Category");
 
 const getAllProducts = async (req, res) => {
   try {
+    //for pagination i have to add  page and pageSize to req.query
     const { category, minPrice, maxPrice, size, color, search } = req.query;
 
-    // Construct the filter object based on the query parameters
     const filter = {};
 
     if (category) {
@@ -29,7 +29,6 @@ const getAllProducts = async (req, res) => {
     }
 
     if (search) {
-      // Use regular expression for case-insensitive search
       const regexSearch = new RegExp(search, "i");
 
       filter.$or = [
@@ -37,6 +36,30 @@ const getAllProducts = async (req, res) => {
         { description: { $regex: regexSearch } },
       ];
     }
+
+    // const currentPage = parseInt(page) || 1;
+    // const pageSizeLimit = 50; // You can set a maximum limit for the pageSize
+
+    // const productsCount = await Product.countDocuments(filter);
+
+    // const pageSize = parseInt(pageSize) || 10;
+    // const totalPages = Math.ceil(productsCount / pageSize);
+
+    // if (currentPage > totalPages) {
+    //   return res.status(404).json({ message: "Page not found." });
+    // }
+
+    // const products = await Product.find(filter)
+    //   .skip((currentPage - 1) * pageSize)
+    //   .limit(pageSize);
+
+    // res.json({
+    //   currentPage,
+    //   pageSize,
+    //   totalPages,
+    //   totalProducts: productsCount,
+    //   products,
+    // });
 
     const products = await Product.find(filter);
 

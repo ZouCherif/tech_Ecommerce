@@ -109,3 +109,15 @@ PUT /api/admin/orders/:orderId: Update the status of an order (admin only, prote
 5. User Reviews and Ratings:
 
 POST /api/products/:productId/reviews: Add a review and rating for a product (protected route with JWT authentication).
+
+obligatory funtionalities:
+Cart
+orders
+wishlist
+images upload
+password reset, email verification, and handling user account deletion.
+
+additional functionalities:
+pegination
+sorting products
+Reviews and Ratings
