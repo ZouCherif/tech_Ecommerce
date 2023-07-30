@@ -14,13 +14,15 @@ const addToCart = async (req, res) => {
       return res.status(400).json({ message: "Not enough stock available" });
     }
 
+    price = product.price;
+
     const cart = await Cart.findOne({ user: req.userId });
     if (!cart) {
       const newCart = new Cart({ user: req.userId, items: [] });
       await newCart.save();
     }
 
-    cart.items.push({ product: productId, quantity });
+    cart.items.push({ product: productId, quantity, price });
     const result = await cart.save();
 
     res.json({ message: "Product added to cart successfully" });
@@ -86,9 +88,17 @@ const removeFromCart = async (req, res) => {
 const getCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.userId }).populate(
-      "items.product"
+      "items.product",
+      "_id name price"
     );
-    res.json(cart);
+    if (!cart) {
+      return res.status(200).json({ message: "Cart is empty." });
+    }
+    let totalPrice = 0;
+    cart.items.forEach((item) => {
+      totalPrice += item.quantity * item.price;
+    });
+    res.json({ cart, totalPrice });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error retrieving cart" });
