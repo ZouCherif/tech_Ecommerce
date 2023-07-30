@@ -116,6 +116,7 @@ orders
 wishlist
 images upload
 password reset, email verification, and handling user account deletion.
+sending email confirmation when order is placed
 
 additional functionalities:
 pegination

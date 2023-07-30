@@ -1,7 +1,6 @@
-// controllers/orderController.js
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 
-// Place a new order
 const placeOrder = async (req, res) => {
   try {
     const { products, shippingAddress, paymentMethod, totalAmount } = req.body;
@@ -14,6 +13,27 @@ const placeOrder = async (req, res) => {
       totalAmount,
     });
 
+    // Update product stock levels
+    for (const { product: productId, quantity } of products) {
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res
+          .status(404)
+          .json({ message: `Product with ID ${productId} not found` });
+      }
+
+      // Check if there is enough stock to fulfill the order
+      if (quantity > product.stock) {
+        return res.status(400).json({
+          message: `Not enough stock available for product ${product.name}`,
+        });
+      }
+
+      // Update the product stock level
+      product.stock -= quantity;
+      await product.save();
+    }
+
     res.json({ message: "Order placed successfully", order: newOrder });
   } catch (error) {
     console.error(error);
@@ -21,7 +41,6 @@ const placeOrder = async (req, res) => {
   }
 };
 
-// Get all orders for a specific user
 const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.userId }).populate(
@@ -37,7 +56,7 @@ const getUserOrders = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    const { orderId, ...updatedFields } = req.body;
+    const { orderId, products, ...updatedFields } = req.body;
 
     const order = await Order.findOne({ _id: orderId });
     if (!order) {
@@ -60,6 +79,32 @@ const updateOrder = async (req, res) => {
     Object.assign(order, updatedFields);
     await order.save();
 
+    for (const { product: productId, quantity } of products) {
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res
+          .status(404)
+          .json({ message: `Product with ID ${productId} not found` });
+      }
+
+      // Calculate the difference in quantity between the updated order and the original order
+      const originalQuantity = order.products.find((item) =>
+        item.product.equals(productId)
+      ).quantity;
+      const quantityDifference = quantity - originalQuantity;
+
+      // Check if there is enough stock to fulfill the updated order
+      if (quantityDifference > product.stock) {
+        return res.status(400).json({
+          message: `Not enough stock available for product ${product.name}`,
+        });
+      }
+
+      // Update the product stock level
+      product.stock -= quantityDifference;
+      await product.save();
+    }
+
     res.json({ message: "Order details updated successfully" });
   } catch (error) {
     console.error(error);
@@ -67,17 +112,27 @@ const updateOrder = async (req, res) => {
   }
 };
 
-// Delete an order (admin only for confirmed orders)
 const deleteOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
 
-    const order = await Order.findOne({ _id: orderId });
+    const order = await Order.findOne({ _id: orderId }).populate(
+      "products.product"
+    );
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
     if (order.status === "confirmed" && req.roles.includes("admin")) {
+      // Restore product stock levels
+      for (const {
+        product: { _id, stock },
+        quantity,
+      } of order.products) {
+        const updatedStock = stock + quantity;
+        await Product.findByIdAndUpdate(_id, { stock: updatedStock });
+      }
+
       await order.remove();
       return res.json({ message: "Order deleted successfully" });
     }
@@ -93,6 +148,15 @@ const deleteOrder = async (req, res) => {
       return res
         .status(403)
         .json({ message: "Unauthorized to delete this order" });
+    }
+
+    // Restore product stock levels
+    for (const {
+      product: { _id, stock },
+      quantity,
+    } of order.products) {
+      const updatedStock = stock + quantity;
+      await Product.findByIdAndUpdate(_id, { stock: updatedStock });
     }
 
     await order.remove();
