@@ -11,7 +11,6 @@ const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
 
 connectDB();
-
 app.use(logger);
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -25,6 +24,7 @@ app.use("/logout", require("./routes/logout"));
 app.use("/profile", require("./routes/api/profile"));
 app.use("/categories", require("./routes/api/categories"));
 app.use("/products", require("./routes/api/products"));
+app.use("/cart", require("./routes/api/cart"));
 
 app.all("*", (req, res) => {
   res.status(404);
