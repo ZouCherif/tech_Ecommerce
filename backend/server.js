@@ -25,6 +25,7 @@ app.use("/profile", require("./routes/api/profile"));
 app.use("/categories", require("./routes/api/categories"));
 app.use("/products", require("./routes/api/products"));
 app.use("/cart", require("./routes/api/cart"));
+app.use("/order", require("./routes/api/order"));
 
 app.all("*", (req, res) => {
   res.status(404);

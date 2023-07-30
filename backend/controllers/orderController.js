@@ -3,16 +3,14 @@ const Product = require("../models/Product");
 
 const placeOrder = async (req, res) => {
   try {
-    const { products, shippingAddress, paymentMethod, totalAmount } = req.body;
-
+    const { products, shippingAddress, totalAmount, note } = req.body;
     const newOrder = await Order.create({
       user: req.userId,
       products,
       shippingAddress,
-      paymentMethod,
       totalAmount,
+      note,
     });
-
     // Update product stock levels
     for (const { product: productId, quantity } of products) {
       const product = await Product.findById(productId);
