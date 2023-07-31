@@ -3,11 +3,39 @@ const Product = require("../models/Product");
 
 const placeOrder = async (req, res) => {
   try {
-    const { products, shippingAddress, totalAmount, note } = req.body;
+    const {
+      firstName,
+      lastName,
+      phoneNumber,
+      products,
+      city,
+      municipal,
+      address,
+      totalAmount,
+      note,
+    } = req.body;
+
+    if (
+      !firstName ||
+      !lastName ||
+      !phoneNumber ||
+      !address ||
+      !city ||
+      !municipal
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Please provide all the required information" });
+    }
+
     const newOrder = await Order.create({
       user: req.userId,
       products,
-      shippingAddress,
+      shippingAddress: {
+        address,
+        city,
+        municipal,
+      },
       totalAmount,
       note,
     });
@@ -65,13 +93,6 @@ const updateOrder = async (req, res) => {
       return res
         .status(403)
         .json({ message: "Cannot update a confirmed order" });
-    }
-
-    // Check if the order belongs to the logged-in user
-    if (order.user.toString() !== req.userId && !req.roles.includes("admin")) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to update this order" });
     }
 
     Object.assign(order, updatedFields);

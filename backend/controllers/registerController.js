@@ -2,16 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
 const handleNewUser = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    username,
-    email,
-    pwd,
-    pwdC,
-    phoneNumber,
-    address,
-  } = req.body;
+  const { username, email, pwd, pwdC } = req.body;
   if (!email || !pwd)
     return res
       .status(400)
@@ -26,13 +17,9 @@ const handleNewUser = async (req, res) => {
     const hashedPwd = await bcrypt.hash(pwd, 10);
     //create and store the new user
     const result = await User.create({
-      firstName,
-      lastName,
       username,
       email,
       password: hashedPwd,
-      phoneNumber,
-      address,
     });
     console.log(result);
     res.status(201).json({ success: `New user ${username} created!` });

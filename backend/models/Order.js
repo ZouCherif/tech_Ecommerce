@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+      phoneNumber: { type: String, required: true },
     },
     products: [
       {
@@ -26,8 +27,9 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     shippingAddress: {
-      type: String,
-      required: true,
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      municipal: { type: String, required: true },
     },
     status: {
       type: String,
