@@ -30,7 +30,7 @@ const handleLogin = async (req, res) => {
     const refreshToken = jwt.sign(
       { email: foundUser.email },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "2d" }
+      { expiresIn: "1d" }
     );
     // Saving refreshToken with current user
     foundUser.refreshToken = refreshToken;
