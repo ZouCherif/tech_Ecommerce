@@ -122,3 +122,5 @@ additional functionalities:
 pegination
 sorting products
 Reviews and Ratings
+
+TODO: the delivery price depend on the destination

@@ -1,5 +1,6 @@
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
+const Destination = require("../models/Destination");
 
 const addToCart = async (req, res) => {
   try {
@@ -87,18 +88,33 @@ const removeFromCart = async (req, res) => {
 // Get the cart items for the logged-in user
 const getCart = async (req, res) => {
   try {
+    const { destination } = req.query; // Assuming destination is passed as a query parameter
+
     const cart = await Cart.findOne({ user: req.userId }).populate(
       "items.product",
       "_id name price"
     );
+
     if (!cart) {
       return res.status(200).json({ message: "Cart is empty." });
     }
+
     let totalPrice = 0;
     cart.items.forEach((item) => {
       totalPrice += item.quantity * item.price;
     });
-    res.json({ cart, totalPrice });
+
+    // Look up the delivery price for the destination city from the database
+    const city = await Destination.findOne({ name: destination }); // Assuming 'City' model has a 'name' field for city names and a 'deliveryPrice' field for the delivery price
+
+    if (!city) {
+      return res.status(400).json({ message: "Invalid destination city." });
+    }
+
+    // Calculate the total amount including the delivery price
+    const totalAmount = totalPrice + city.deliveryPrice;
+
+    res.json({ cart, totalPrice, totalAmount });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error retrieving cart" });
