@@ -10,8 +10,28 @@ router.use(verifyJWT); // Protect all order routes with JWT authentication
 router
   .route("/")
   .post(orderController.placeOrder)
-  .get(orderController.getUserOrders)
+  .get(orderController.getUserOrders);
+router
+  .route("/:orderId")
   .put(verifyUserRole("admin"), orderController.updateOrderStatus)
   .delete(verifyUserRole("admin"), orderController.deleteOrder);
+
+router.get(
+  "/pending",
+  verifyUserRole("admin"),
+  orderController.getPendingOrders
+);
+
+router.get(
+  "/confirmed",
+  verifyUserRole("admin"),
+  orderController.getConfirmedOrders
+);
+
+router.get(
+  "/delivered",
+  verifyUserRole("admin"),
+  orderController.getDeliveredOrders
+);
 
 module.exports = router;

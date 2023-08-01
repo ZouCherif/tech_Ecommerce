@@ -163,4 +163,51 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-module.exports = { placeOrder, getUserOrders, updateOrderStatus, deleteOrder };
+const getPendingOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ status: "pending" }).populate(
+      "products.product",
+      "_id name price"
+    );
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving pending orders" });
+  }
+};
+
+const getConfirmedOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ status: "confirmed" }).populate(
+      "products.product",
+      "_id name price"
+    );
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving confirmed orders" });
+  }
+};
+
+const getDeliveredOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ status: "delivered" }).populate(
+      "products.product",
+      "_id name price"
+    );
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving delivered orders" });
+  }
+};
+
+module.exports = {
+  placeOrder,
+  getUserOrders,
+  updateOrderStatus,
+  deleteOrder,
+  getPendingOrders,
+  getConfirmedOrders,
+  getDeliveredOrders,
+};
