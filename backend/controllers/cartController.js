@@ -89,7 +89,6 @@ const removeFromCart = async (req, res) => {
 const getCart = async (req, res) => {
   try {
     const { destination } = req.query; // Assuming destination is passed as a query parameter
-
     const cart = await Cart.findOne({ user: req.userId }).populate(
       "items.product",
       "_id name price"
@@ -105,16 +104,20 @@ const getCart = async (req, res) => {
     });
 
     // Look up the delivery price for the destination city from the database
-    const city = await Destination.findOne({ name: destination }); // Assuming 'City' model has a 'name' field for city names and a 'deliveryPrice' field for the delivery price
-
+    const city = await Destination.findOne(
+      { "destinations.name": destination },
+      { "destinations.$": 1 }
+    );
     if (!city) {
       return res.status(400).json({ message: "Invalid destination city." });
     }
 
-    // Calculate the total amount including the delivery price
-    const totalAmount = totalPrice + city.price;
+    const { price } = city.destinations[0];
 
-    res.json({ cart, totalPrice, totalAmount });
+    // Calculate the total amount including the delivery price
+    const totalAmount = totalPrice + price;
+
+    res.json({ cart, totalPrice, price, totalAmount });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error retrieving cart" });

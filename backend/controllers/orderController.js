@@ -1,5 +1,6 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
+const Destination = require("../models/Destination");
 
 const placeOrder = async (req, res) => {
   try {
@@ -11,7 +12,6 @@ const placeOrder = async (req, res) => {
       city,
       municipal,
       address,
-      totalAmount,
       note,
     } = req.body;
 
@@ -28,17 +28,51 @@ const placeOrder = async (req, res) => {
         .json({ message: "Please provide all the required information" });
     }
 
+    let totalPrice = 0;
+    for (const { product: productId, quantity } of products) {
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res
+          .status(404)
+          .json({ message: `Product with ID ${productId} not found` });
+      }
+      totalPrice += product.price * quantity;
+    }
+
+    const destination = await Destination.findOne(
+      { "destinations.name": city },
+      { "destinations.$": 1 }
+    );
+    if (!destination) {
+      return res.status(400).json({ message: "Invalid destination city." });
+    }
+
+    const { price: deliveryPrice } = destination.destinations[0];
+
+    const totalPayment = totalPrice + price;
+
     const newOrder = await Order.create({
-      user: req.userId,
+      user: {
+        id: req.userId,
+        firstName,
+        lastName,
+        phoneNumber,
+      },
       products,
       shippingAddress: {
         address,
         city,
         municipal,
       },
-      totalAmount,
+      status: "pending",
+      totalAmount: {
+        totalPrice,
+        deliveryPrice,
+        totalPayment,
+      },
       note,
     });
+
     // Update product stock levels
     for (const { product: productId, quantity } of products) {
       const product = await Product.findById(productId);
@@ -48,14 +82,12 @@ const placeOrder = async (req, res) => {
           .json({ message: `Product with ID ${productId} not found` });
       }
 
-      // Check if there is enough stock to fulfill the order
       if (quantity > product.stock) {
         return res.status(400).json({
           message: `Not enough stock available for product ${product.name}`,
         });
       }
 
-      // Update the product stock level
       product.stock -= quantity;
       await product.save();
     }

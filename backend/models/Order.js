@@ -37,8 +37,18 @@ const orderSchema = new mongoose.Schema(
       default: "pending",
     },
     totalAmount: {
-      type: Number,
-      required: true,
+      totalPrice: {
+        type: Number,
+        required: true,
+      },
+      deliveryPrice: {
+        type: Number,
+        required: true,
+      },
+      totalPayment: {
+        type: Number,
+        required: true,
+      },
     },
     note: {
       type: String,
