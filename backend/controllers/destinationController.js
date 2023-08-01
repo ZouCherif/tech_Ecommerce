@@ -2,11 +2,21 @@ const Destination = require("../models/Destination");
 
 const getDestinations = async (req, res) => {
   try {
-    const destinations = await Destination.find().select("destinations");
+    const destinations = await Destination.findOne()
+      .select({
+        "destinations._id": 0,
+        _id: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      })
+      .lean()
+      .exec();
     if (!destinations) {
       return res.status(404).json({ message: "Destinations not found" });
     }
-    res.json({ destinations: destinations.destinations });
+
+    res.json(destinations);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching destinations" });

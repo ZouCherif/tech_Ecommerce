@@ -27,6 +27,7 @@ app.use("/products", require("./routes/api/products"));
 app.use("/cart", require("./routes/api/cart"));
 app.use("/order", require("./routes/api/order"));
 app.use("/wishlist", require("./routes/api/wishlist"));
+app.use("/destinations", require("./routes/api/destinations"));
 
 app.all("*", (req, res) => {
   res.status(404);

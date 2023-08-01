@@ -123,4 +123,4 @@ pegination
 sorting products
 Reviews and Ratings
 
-TODO: the delivery price depend on the destination
+dont forget to return delay of acces token to 15min

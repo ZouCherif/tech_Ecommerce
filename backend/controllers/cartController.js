@@ -112,7 +112,7 @@ const getCart = async (req, res) => {
     }
 
     // Calculate the total amount including the delivery price
-    const totalAmount = totalPrice + city.deliveryPrice;
+    const totalAmount = totalPrice + city.price;
 
     res.json({ cart, totalPrice, totalAmount });
   } catch (error) {
