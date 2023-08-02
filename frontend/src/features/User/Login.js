@@ -3,7 +3,7 @@ import { useLoginUserMutation } from "../../api/apiSlice";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [loginUser, { isSuccess, error }] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
   const [data, setData] = useState({
     email: "",
     pwd: "",
@@ -20,20 +20,15 @@ function Login() {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    if (!data.username || !data.password) return;
-    console.log(data);
+    if (!data.email || !data.pwd) return;
     try {
-      const token = await loginUser(data).unwrap();
-      console.log(token);
-      if (isSuccess) {
-        navigate("/");
-      } else {
-        console.log(error);
-      }
+      const user = await loginUser(data).unwrap();
+      console.log(user);
+      setData({ username: "", password: "" });
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
-    setData({ username: "", password: "" });
   };
 
   return (
@@ -47,7 +42,7 @@ function Login() {
         value={data.email}
         onChange={handleOnChange}
       />
-      <label htmlFor="pwd">Email</label>
+      <label htmlFor="pwd">Password</label>
       <input
         type="password"
         name="pwd"
