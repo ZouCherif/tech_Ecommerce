@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useRegisterNewUserMutation } from "../../api/apiSlice";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [addNewUser, { isloading }] = useRegisterNewUserMutation();
+  const [addNewUser, { isSuccess, error }] = useRegisterNewUserMutation();
   const [data, setData] = useState({
     email: "",
     username: "",
     pwd: "",
     pwdC: "",
   });
+  const navigate = useNavigate();
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prevFormData) => ({
@@ -23,6 +25,11 @@ function Register() {
     try {
       const response = await addNewUser(data).unwrap();
       console.log(response);
+      if (isSuccess) {
+        navigate("/login");
+      } else {
+        console.log(error);
+      }
     } catch (err) {
       console.error("failed: ", err);
     }
