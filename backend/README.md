@@ -123,4 +123,6 @@ pegination
 sorting products
 Reviews and Ratings
 
+tasks:
 dont forget to return delay of acces token to 15min
+delete profile apis or not?
