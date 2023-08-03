@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLoginUserMutation } from "../../api/apiSlice";
 import { useNavigate, Link } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 function Login() {
   const [loginUser] = useLoginUserMutation();
@@ -8,6 +9,7 @@ function Login() {
     email: "",
     pwd: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleOnChange = (e) => {
@@ -62,14 +64,33 @@ function Login() {
           >
             PASSWORD:
           </label>
-          <input
-            type="password"
-            name="pwd"
-            id="pwd"
-            value={data.pwd}
-            onChange={handleOnChange}
-            className="border-2 border-gray-300 p-2 mb-1"
-          />
+          <div className="border-2 border-gray-300 mb-1 flex items-center">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="pwd"
+              id="pwd"
+              value={data.pwd}
+              onChange={handleOnChange}
+              className=" h-full p-2 w-full focus:outline-none"
+            />
+            {showPassword ? (
+              <AiOutlineEye
+                size={30}
+                className="p-1 cursor-pointer"
+                onClick={() =>
+                  setShowPassword((prevShowPasswords) => !prevShowPasswords)
+                }
+              />
+            ) : (
+              <AiOutlineEyeInvisible
+                size={30}
+                className="p-1 cursor-pointer"
+                onClick={() =>
+                  setShowPassword((prevShowPasswords) => !prevShowPasswords)
+                }
+              />
+            )}
+          </div>
           <Link
             to={"/forgotPassword"}
             className="mb-6 ss:text-xs text-[0.6rem] hover:underline"
@@ -83,7 +104,7 @@ function Login() {
             LOGIN
           </button>
         </form>
-        <p className="text-center mb-4">YOU DON'T HAVE AN ACCOUNT?</p>
+        <p className="text-center mb-4 px-4">YOU DON'T HAVE AN ACCOUNT?</p>
         <Link
           to={"/register"}
           className="bg-green-200 block ss:w-1/2 w-2/3 mx-auto text-center text-black font-semibold py-2 hover:bg-white duration-700 border-2 border-green-200 tracking-widest mb-4"

@@ -10,6 +10,7 @@ function Register() {
     pwd: "",
     pwdC: "",
   });
+  const [showPasswords, setShowPasswords] = useState(false);
   const navigate = useNavigate();
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +57,7 @@ function Register() {
             htmlFor="email"
             className="text-gray-500 mb-2 ss:text-sm text-xs font-semibold"
           >
-            EMAIL:
+            EMAIL ADDRESS:
           </label>
           <input
             type="text"
@@ -87,7 +88,7 @@ function Register() {
             PASSWORD:
           </label>
           <input
-            type="password"
+            type={showPasswords ? "text" : "password"}
             name="pwd"
             id="pwd"
             value={data.pwd}
@@ -101,13 +102,27 @@ function Register() {
             CONFIRM PASSWORD:
           </label>
           <input
-            type="password"
+            type={showPasswords ? "text" : "password"}
             name="pwdC"
             id="pwdC"
             value={data.pwdC}
             onChange={handleOnChange}
-            className="border-2 border-gray-300 p-2 mb-6"
+            className="border-2 border-gray-300 p-2 mb-2"
           />
+          <div className="flex items-center mb-6">
+            <input
+              id="showpwd"
+              type="checkbox"
+              checked={showPasswords}
+              onChange={() =>
+                setShowPasswords((prevShowPasswords) => !prevShowPasswords)
+              }
+              className="mr-1 cursor-pointer"
+            />
+            <label htmlFor="showpwd" className="text-xs cursor-pointer">
+              SHOW PASSWORDS
+            </label>
+          </div>
           <button
             type="submit"
             className="bg-black text-white font-semibold py-3 hover:bg-white hover:text-black duration-700 border-2 border-black tracking-widest mb-4"
@@ -115,7 +130,7 @@ function Register() {
             REGISTER
           </button>
         </form>
-        <p className="text-center mb-4">ALREADY HAVE AN ACCOUNT?</p>
+        <p className="text-center mb-4 px-4">ALREADY HAVE AN ACCOUNT?</p>
         <Link
           to={"/auth"}
           className="bg-green-200 block ss:w-1/2 w-2/3 mx-auto text-center text-black font-semibold py-2 hover:bg-white duration-700 border-2 border-green-200 tracking-widest mb-4"
