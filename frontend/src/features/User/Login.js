@@ -83,6 +83,13 @@ function Login() {
             LOGIN
           </button>
         </form>
+        <p className="text-center mb-4">YOU DON'T HAVE AN ACCOUNT?</p>
+        <Link
+          to={"/register"}
+          className="bg-green-200 block ss:w-1/2 w-2/3 mx-auto text-center text-black font-semibold py-2 hover:bg-white duration-700 border-2 border-green-200 tracking-widest mb-4"
+        >
+          REGISTER
+        </Link>
         <div className="flex items-center mx-center justify-center">
           <hr className="border-black w-1/3" />
           <span className="mx-2 text-xs">OR</span>
