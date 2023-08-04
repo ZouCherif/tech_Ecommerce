@@ -43,11 +43,11 @@ function ForgotPassword() {
 
   return (
     <div className="bg-stone-100 h-screen select-none flex justify-center">
-      <div className="w-1/2 bg-white px-4">
+      <div className="sm:w-1/2 w-3/4 bg-white px-4">
         <h1 className="font-bold text-4xl text-center py-6">LOGO</h1>
         <hr className="border-black mb-4" />
         <form
-          className="flex flex-col ss:w-2/3 p-4 mx-auto"
+          className="flex flex-col ss:w-2/3 ss:p-4 mx-auto tracking-widest"
           onSubmit={handleOnSubmit}
         >
           <p className="text-center text-sm mb-6">
