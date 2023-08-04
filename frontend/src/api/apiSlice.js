@@ -18,7 +18,18 @@ export const apiSlice = createApi({
         body: credentials,
       }),
     }),
+    forgotPassword: builder.mutation({
+      query: (email) => ({
+        url: "/auth/forgotpassword",
+        method: "POST",
+        body: email,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterNewUserMutation, useLoginUserMutation } = apiSlice;
+export const {
+  useRegisterNewUserMutation,
+  useLoginUserMutation,
+  useForgotPasswordMutation,
+} = apiSlice;

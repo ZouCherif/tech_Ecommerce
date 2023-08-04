@@ -59,7 +59,7 @@ function Register() {
     }
   };
   return (
-    <div className="bg-stone-100 h-full">
+    <div className="bg-stone-100 h-full select-none">
       <h1 className="font-bold text-4xl text-center py-10">LOGO</h1>
 
       <div className="sm:w-1/2 w-3/4 mx-auto bg-white py-10 tracking-widest">
