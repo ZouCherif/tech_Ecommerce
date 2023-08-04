@@ -7,3 +7,24 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+@keyframes custom-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  20%,
+  80% {
+    transform: translateY(-8px);
+    animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+  }
+  40%,
+  60% {
+    transform: translateY(-4px);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+}
+.animate-custom-bounce {
+  animation: custom-bounce 1s;
+}

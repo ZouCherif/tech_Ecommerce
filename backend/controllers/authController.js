@@ -7,10 +7,10 @@ const handleLogin = async (req, res) => {
   if (!email || !pwd)
     return res
       .status(400)
-      .json({ message: "Username and password are required." });
+      .json({ message: "Email and password are required." });
 
   const foundUser = await User.findOne({ email }).exec();
-  if (!foundUser) return res.status(401).json({ message: "user not found" }); //Unauthorized
+  if (!foundUser) return res.status(401).json({ message: "User not found" }); //Unauthorized
   // evaluate password
   const match = await bcrypt.compare(pwd, foundUser.password);
   if (match) {
@@ -49,7 +49,7 @@ const handleLogin = async (req, res) => {
     // Send authorization roles and access token to user
     res.json({ roles, accessToken });
   } else {
-    res.sendStatus(401);
+    res.status(401).json({ message: "Invalid password" });
   }
 };
 
