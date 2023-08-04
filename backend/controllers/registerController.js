@@ -16,12 +16,51 @@ const handleNewUser = async (req, res) => {
     //encrypt the password
     const hashedPwd = await bcrypt.hash(pwd, 10);
     //create and store the new user
-    const result = await User.create({
+    const newUser = await User.create({
       username,
       email,
       password: hashedPwd,
     });
-    console.log(result);
+
+    // // Generate JWTs
+    // const roles = Object.values(newUser.roles).filter(Boolean);
+    // const accessToken = jwt.sign(
+    //   {
+    //     UserInfo: {
+    //       id: newUser._id,
+    //       email: newUser.email,
+    //       roles: roles,
+    //     },
+    //   },
+    //   process.env.ACCESS_TOKEN_SECRET,
+    //   { expiresIn: "59m" }
+    // );
+
+    // const refreshToken = jwt.sign(
+    //   { email: newUser.email },
+    //   process.env.REFRESH_TOKEN_SECRET,
+    //   { expiresIn: "1d" }
+    // );
+
+    // // Store the refreshToken in the user document
+    // newUser.refreshToken = refreshToken;
+    // await newUser.save();
+
+    // // Send the access token and refresh token to the client
+    // res.cookie("access_token", accessToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "None",
+    //   maxAge: 59 * 60 * 1000, // Expiry time in milliseconds
+    // });
+
+    // res.cookie("refresh_token", refreshToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "None",
+    //   maxAge: 24 * 60 * 60 * 1000, // Expiry time in milliseconds
+    // });
+    console.log(newUser);
     res.status(201).json({ success: `New user ${username} created!` });
   } catch (err) {
     res.status(500).json({ message: err.message });

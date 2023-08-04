@@ -38,8 +38,13 @@ const handleLogin = async (req, res) => {
     console.log(result);
     console.log(roles);
 
-    // Creates Secure Cookie with refresh token
-    res.cookie("jwt", refreshToken, {
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 59 * 60 * 1000, // 59 minutes
+    });
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
@@ -47,7 +52,7 @@ const handleLogin = async (req, res) => {
     });
 
     // Send authorization roles and access token to user
-    res.json({ roles, accessToken });
+    res.sendStatus(200);
   } else {
     res.status(401).json({ message: "Invalid password" });
   }

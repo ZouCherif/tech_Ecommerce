@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 
 const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(401);
-  const refreshToken = cookies.jwt;
+  if (!cookies?.refresh_token) return res.sendStatus(401);
+  const refreshToken = cookies.refresh_token;
 
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //Forbidden
@@ -23,7 +23,13 @@ const handleRefreshToken = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "59m" }
     );
-    res.json({ roles, accessToken });
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 59 * 60 * 1000, // Expiry time in milliseconds
+    });
+    res.json({ message: "Access token refreshed successfully." });
   });
 };
 
