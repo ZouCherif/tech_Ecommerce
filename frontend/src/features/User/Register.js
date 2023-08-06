@@ -32,13 +32,14 @@ function Register() {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setServerError("");
     if (!data.email || !data.pwd || !data.pwdC || !data.username) return;
     if (!validateEmail(data.email)) {
       setEmailError("Please enter a valid email address");
       return;
     }
     setEmailError("");
-    if (pwd !== pwdC) {
+    if (data.pwd !== data.pwdC) {
       setServerError("Passwords do not match");
       return;
     }

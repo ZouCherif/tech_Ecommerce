@@ -5,7 +5,8 @@ import { IoAlertCircleSharp } from "react-icons/io5";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [forgotPassword, { isLoading, isSuccess }] =
+    useForgotPasswordMutation();
   const [emailError, setEmailError] = useState("");
   const [serverError, setServerError] = useState("");
 
@@ -82,13 +83,21 @@ function ForgotPassword() {
               {serverError}
             </div>
           )}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="bg-black cursor-pointer text-white font-semibold py-3 hover:bg-white hover:text-black duration-700 border-2 border-black tracking-widest mb-4 flex items-center justify-center"
-          >
-            {isLoading ? <ClipLoader color="#E0E0E0," size={25} /> : "CONTINUE"}
-          </button>
+          {!isSuccess ? (
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-black cursor-pointer text-white font-semibold py-3 hover:bg-white hover:text-black duration-700 border-2 border-black tracking-widest mb-4 flex items-center justify-center"
+            >
+              {isLoading ? (
+                <ClipLoader color="#E0E0E0," size={25} />
+              ) : (
+                "CONTINUE"
+              )}
+            </button>
+          ) : (
+            <p>An email was sent to you </p>
+          )}
         </form>
       </div>
     </div>
