@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
 import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 function Login() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -154,18 +155,18 @@ function Login() {
         <h3 className="text-center font-semibold mb-4 p-4">
           LOGIN WITH GOOGLE ACCOUNT
         </h3>
-        {/* <div className="border-2 text-center px-2 py-4 w-1/3 mx-auto bg-green-400">
-          GOOGLE
-        </div> */}
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
-          }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        />
-        ;
+        <div className="w-fit mx-auto">
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              console.log(credentialResponse);
+              const decoded = jwt_decode(credentialResponse.credential);
+              console.log(decoded);
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
+        </div>
       </div>
     </div>
   );
