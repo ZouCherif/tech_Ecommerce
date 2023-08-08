@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const jwt_decode = require("jwt-decode");
 
 const handleLogin = async (req, res) => {
   const { email, pwd } = req.body;
@@ -58,4 +59,26 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleLogin };
+const handleGoogleAuth = async (req, res) => {
+  const { credentialResponse } = req.body;
+  if (!credentialResponse)
+    return res.status(400).json({ message: "Invalid credentials" });
+  const credentials = jwt_decode(credentialResponse.credentials);
+  const user = await User.findOne({ email: credentials.email }).exec();
+  if (!user) {
+    try {
+      const result = await User.create({
+        email: credentials.email,
+        username: credentials.name,
+      });
+      console.log(result);
+      res
+        .status(201)
+        .json({ message: `new user ${credentials.name} registred` });
+    } catch (err) {
+      res.status(404).json({ error: err.message });
+    }
+  }
+};
+
+module.exports = { handleLogin, handleGoogleAuth };

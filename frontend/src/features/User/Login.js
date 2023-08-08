@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { useLoginUserMutation } from "../../api/apiSlice";
+import {
+  useLoginUserMutation,
+  useGoogleAuthMutation,
+} from "../../api/apiSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
 import { GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
 
 function Login() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [googleLogin, { isLoading: isGoogleLoginLoading }] =
+    useGoogleAuthMutation();
   const [data, setData] = useState({
     email: "",
     pwd: "",
@@ -47,6 +51,16 @@ function Login() {
       navigate("/");
     } catch (err) {
       setServerError(err.data.message);
+      console.error(err);
+    }
+  };
+
+  const onGoogleLoginSuccess = async (credentialResponse) => {
+    try {
+      const user = await googleLogin(credentialResponse).unwrap();
+      console.log(user);
+      navigate("/");
+    } catch (err) {
       console.error(err);
     }
   };
@@ -157,11 +171,7 @@ function Login() {
         </h3>
         <div className="w-fit mx-auto">
           <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-              const decoded = jwt_decode(credentialResponse.credential);
-              console.log(decoded);
-            }}
+            onSuccess={onGoogleLoginSuccess}
             onError={() => {
               console.log("Login Failed");
             }}
