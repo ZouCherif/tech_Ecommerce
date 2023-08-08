@@ -131,3 +131,13 @@ in verify role and verifyJWT
 // const authHeader = req.headers.authorization || req.headers.Authorization;
 // if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
 // const token = authHeader.split(" ")[1];
+
+app.post('/auth/google/refresh-token', async (req, res) => {
+const user = new UserRefreshClient(
+clientId,
+clientSecret,
+req.body.refreshToken,
+);
+const { credentials } = await user.refreshAccessToken(); // optain new tokens
+res.json(credentials);
+})

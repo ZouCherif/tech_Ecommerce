@@ -7,11 +7,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  const [googleLogin, { isLoading: isGoogleLoginLoading }] =
+  const [googleAuth, { isLoading: isGoogleLoginLoading }] =
     useGoogleAuthMutation();
   const [data, setData] = useState({
     email: "",
@@ -55,15 +55,22 @@ function Login() {
     }
   };
 
-  const onGoogleLoginSuccess = async (credentialResponse) => {
-    try {
-      const user = await googleLogin(credentialResponse).unwrap();
-      console.log(user);
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const onGoogleLoginSuccess = async (credentialResponse) => {
+  //   try {
+  //     const user = await googleLogin(credentialResponse).unwrap();
+  //     console.log(user);
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      const tokens = await googleAuth({ code: codeResponse }).unwrap();
+    },
+    flow: "auth-code",
+  });
 
   return (
     <div className="bg-stone-100 h-full select-none">
@@ -169,14 +176,15 @@ function Login() {
         <h3 className="text-center font-semibold mb-4 p-4">
           LOGIN WITH GOOGLE ACCOUNT
         </h3>
-        <div className="w-fit mx-auto">
+        {/* <div className="w-fit mx-auto">
           <GoogleLogin
             onSuccess={onGoogleLoginSuccess}
             onError={() => {
               console.log("Login Failed");
             }}
           />
-        </div>
+        </div> */}
+        <button onClick={() => googleLogin()}>login</button>
       </div>
     </div>
   );

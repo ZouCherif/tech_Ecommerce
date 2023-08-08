@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
+const { OAuth2Client } = require("google-auth-library");
 
 const handleLogin = async (req, res) => {
   const { email, pwd } = req.body;
@@ -60,25 +61,39 @@ const handleLogin = async (req, res) => {
 };
 
 const handleGoogleAuth = async (req, res) => {
-  const { credentialResponse } = req.body;
-  if (!credentialResponse)
-    return res.status(400).json({ message: "Invalid credentials" });
-  const credentials = jwt_decode(credentialResponse.credentials);
-  const user = await User.findOne({ email: credentials.email }).exec();
-  if (!user) {
-    try {
-      const result = await User.create({
-        email: credentials.email,
-        username: credentials.name,
-      });
-      console.log(result);
-      res
-        .status(201)
-        .json({ message: `new user ${credentials.name} registred` });
-    } catch (err) {
-      res.status(404).json({ error: err.message });
-    }
-  }
+  // const credentialResponse = req.body;
+  // if (!credentialResponse)
+  //   return res.status(400).json({ message: "Invalid credentials" });
+  // try {
+  //   const credentials = jwt_decode(credentialResponse.credential);
+  //   console.log(credentials);
+  //   const user = await User.findOne({ email: credentials.email }).exec();
+  //   console.log(user);
+  //   if (!user) {
+  //     const result = await User.create({
+  //       email: credentials.email,
+  //       username: credentials.name,
+  //     });
+  //     console.log(result);
+  //     res
+  //       .status(201)
+  //       .json({ message: `new user ${credentials.name} registred` });
+  //   }
+  // } catch (err) {
+  //   res.status(404).json({ error: err.message });
+  // }
+
+  const oAuth2Client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    "postmessage"
+  );
+  const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
+  console.log(tokens);
+  const decoded = jwt_decode(tokens.id_token);
+  console.log(decoded);
+
+  res.json(tokens);
 };
 
 module.exports = { handleLogin, handleGoogleAuth };
