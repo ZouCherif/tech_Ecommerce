@@ -33,4 +33,18 @@ const handleRefreshToken = async (req, res) => {
   });
 };
 
-module.exports = { handleRefreshToken };
+const handleGoogleRefreshToken = async (req, res) => {
+  console.log("Refreshing");
+  const cookies = req.cookies;
+  if (!cookies?.refresh_token) return res.sendStatus(401);
+  const refreshToken = cookies.refresh_token;
+  const user = new UserRefreshClient(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken
+  );
+  const { credentials } = await user.refreshAccessToken();
+  res.json(credentials);
+};
+
+module.exports = { handleRefreshToken, handleGoogleRefreshToken };

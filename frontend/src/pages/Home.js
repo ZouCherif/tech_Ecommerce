@@ -1,7 +1,20 @@
-// import { googleLogout } from "@react-oauth/google";
+import { useGoogleRefreshTokenMutation } from "../api/apiSlice";
 
 function Home() {
-  return <div>{/* <button onClick={googleLogout()}>logout</button> */}</div>;
+  const [refreshGoogleToken] = useGoogleRefreshTokenMutation();
+  const handlerefresh = async () => {
+    try {
+      const result = await refreshGoogleToken().unwrap();
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return (
+    <div>
+      <button onClick={handlerefresh}>refresh</button>
+    </div>
+  );
 }
 
 export default Home;

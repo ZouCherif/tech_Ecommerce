@@ -46,7 +46,6 @@ function Login() {
     setEmailError("");
     try {
       const user = await loginUser(data).unwrap();
-      console.log(user);
       setData({ username: "", password: "" });
       navigate("/");
     } catch (err) {
@@ -68,6 +67,7 @@ function Login() {
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       const tokens = await googleAuth({ code: codeResponse }).unwrap();
+      navigate("/");
     },
     flow: "auth-code",
   });

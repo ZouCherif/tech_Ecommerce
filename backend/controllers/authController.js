@@ -53,7 +53,6 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    // Send authorization roles and access token to user
     res.sendStatus(200);
   } else {
     res.status(401).json({ message: "Invalid password" });
@@ -61,39 +60,43 @@ const handleLogin = async (req, res) => {
 };
 
 const handleGoogleAuth = async (req, res) => {
-  // const credentialResponse = req.body;
-  // if (!credentialResponse)
-  //   return res.status(400).json({ message: "Invalid credentials" });
-  // try {
-  //   const credentials = jwt_decode(credentialResponse.credential);
-  //   console.log(credentials);
-  //   const user = await User.findOne({ email: credentials.email }).exec();
-  //   console.log(user);
-  //   if (!user) {
-  //     const result = await User.create({
-  //       email: credentials.email,
-  //       username: credentials.name,
-  //     });
-  //     console.log(result);
-  //     res
-  //       .status(201)
-  //       .json({ message: `new user ${credentials.name} registred` });
-  //   }
-  // } catch (err) {
-  //   res.status(404).json({ error: err.message });
-  // }
+  if (!req.body.code) return res.status(401).json({ message: "Invalid code" });
+  try {
+    const oAuth2Client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      "postmessage"
+    );
+    const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
+    console.log("tokens:", tokens);
+    const decoded = jwt_decode(tokens.id_token);
+    console.log("decoded:", decoded);
+    // const user = await User.findOne({ email: decoded.email }).exec();
+    // if (!user) {
+    //   const result = await User.create({
+    //     email: decoded.email,
+    //     username: decoded.name,
+    //     refreshToken: decoded.refreshToken,
+    //   });
+    //   console.log(result);
+    // }
+    res.cookie("access_token", tokens.access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 59 * 60 * 1000, // 59 minutes
+    });
+    res.cookie("refresh_token", tokens.refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
-  const oAuth2Client = new OAuth2Client(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    "postmessage"
-  );
-  const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
-  console.log(tokens);
-  const decoded = jwt_decode(tokens.id_token);
-  console.log(decoded);
-
-  res.json(tokens);
+    res.json({ message: "logged in successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 
 module.exports = { handleLogin, handleGoogleAuth };

@@ -25,6 +25,12 @@ export const apiSlice = createApi({
         body: credentials,
       }),
     }),
+    googleRefreshToken: builder.mutation({
+      query: () => ({
+        url: "/refresh/google/refreshToken",
+        method: "GET",
+      }),
+    }),
     forgotPassword: builder.mutation({
       query: (email) => ({
         url: "/auth/forgotpassword",
@@ -40,4 +46,5 @@ export const {
   useLoginUserMutation,
   useForgotPasswordMutation,
   useGoogleAuthMutation,
+  useGoogleRefreshTokenMutation,
 } = apiSlice;
