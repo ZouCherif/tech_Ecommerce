@@ -19,7 +19,6 @@ const handleLogout = async (req, res) => {
   if (!foundUser) {
     return res.sendStatus(204);
   }
-
   foundUser.refreshToken = "";
   const result = await foundUser.save();
   console.log(result);

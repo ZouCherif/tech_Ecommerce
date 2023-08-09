@@ -141,3 +141,6 @@ req.body.refreshToken,
 const { credentials } = await user.refreshAccessToken(); // optain new tokens
 res.json(credentials);
 })
+
+TODO:!!!!!!!!!
+-reset secure atribute to true when sending cookies

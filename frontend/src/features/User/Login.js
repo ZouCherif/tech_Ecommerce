@@ -45,7 +45,7 @@ function Login() {
     }
     setEmailError("");
     try {
-      const user = await loginUser(data).unwrap();
+      await loginUser(data).unwrap();
       setData({ username: "", password: "" });
       navigate("/");
     } catch (err) {
@@ -53,16 +53,6 @@ function Login() {
       console.error(err);
     }
   };
-
-  // const onGoogleLoginSuccess = async (credentialResponse) => {
-  //   try {
-  //     const user = await googleLogin(credentialResponse).unwrap();
-  //     console.log(user);
-  //     navigate("/");
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {

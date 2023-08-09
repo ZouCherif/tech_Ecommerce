@@ -37,23 +37,22 @@ const handleLogin = async (req, res) => {
     // Saving refreshToken with current user
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
-    console.log(roles);
 
     res.cookie("access_token", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge: 59 * 60 * 1000, // 59 minutes
+      domain: "localhost",
     });
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000,
+      domain: "localhost",
     });
-
-    res.sendStatus(200);
+    res.json({ message: "successfully loged in" });
   } else {
     res.status(401).json({ message: "Invalid password" });
   }
