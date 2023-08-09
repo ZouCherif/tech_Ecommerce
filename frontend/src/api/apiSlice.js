@@ -9,6 +9,7 @@ export const apiSlice = createApi({
         url: "/register",
         method: "POST",
         body: credentials,
+        credentials: "include",
       }),
     }),
     loginUser: builder.mutation({
@@ -24,12 +25,14 @@ export const apiSlice = createApi({
         url: "/auth/google",
         method: "POST",
         body: credentials,
+        credentials: "include",
       }),
     }),
     googleRefreshToken: builder.mutation({
       query: () => ({
         url: "/refresh/google/refreshToken",
         method: "GET",
+        credentials: "include",
       }),
     }),
     forgotPassword: builder.mutation({

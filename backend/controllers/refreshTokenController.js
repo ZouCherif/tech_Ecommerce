@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const { UserRefreshClient } = require("google-auth-library");
 
 const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies;
@@ -34,17 +35,26 @@ const handleRefreshToken = async (req, res) => {
 };
 
 const handleGoogleRefreshToken = async (req, res) => {
-  console.log("Refreshing");
   const cookies = req.cookies;
   if (!cookies?.refresh_token) return res.sendStatus(401);
   const refreshToken = cookies.refresh_token;
-  const user = new UserRefreshClient(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    refreshToken
-  );
-  const { credentials } = await user.refreshAccessToken();
-  res.json(credentials);
+  try {
+    const user = new UserRefreshClient(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      refreshToken
+    );
+    const { credentials } = await user.refreshAccessToken();
+    res.cookie("access_token", credentials.access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 59 * 60 * 1000, // 59 minutes
+    });
+    res.json(credentials);
+  } catch (err) {
+    res.json({ error: err });
+  }
 };
 
 module.exports = { handleRefreshToken, handleGoogleRefreshToken };

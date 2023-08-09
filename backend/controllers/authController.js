@@ -70,15 +70,14 @@ const handleGoogleAuth = async (req, res) => {
     console.log("tokens:", tokens);
     const decoded = jwt_decode(tokens.id_token);
     console.log("decoded:", decoded);
-    // const user = await User.findOne({ email: decoded.email }).exec();
-    // if (!user) {
-    //   const result = await User.create({
-    //     email: decoded.email,
-    //     username: decoded.name,
-    //     refreshToken: decoded.refreshToken,
-    //   });
-    //   console.log(result);
-    // }
+    const user = await User.findOne({ email: decoded.email }).exec();
+    if (!user) {
+      const result = await User.create({
+        email: decoded.email,
+        username: decoded.name,
+        refreshToken: decoded.refreshToken,
+      });
+    }
     res.cookie("access_token", tokens.access_token, {
       httpOnly: true,
       secure: true,
