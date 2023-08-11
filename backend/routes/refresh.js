@@ -6,6 +6,6 @@ const {
 } = require("../controllers/refreshTokenController");
 
 router.get("/", handleRefreshToken);
-router.get("/google/refreshToken", handleGoogleRefreshToken);
+// router.get("/google/refreshToken", handleGoogleRefreshToken);
 
 module.exports = router;

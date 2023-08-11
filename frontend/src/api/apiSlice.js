@@ -28,9 +28,9 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     }),
-    googleRefreshToken: builder.mutation({
+    RefreshToken: builder.mutation({
       query: () => ({
-        url: "/refresh/google/refreshToken",
+        url: "/refresh",
         method: "GET",
         credentials: "include",
       }),

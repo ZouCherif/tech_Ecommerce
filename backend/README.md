@@ -123,24 +123,27 @@ pegination
 sorting products
 Reviews and Ratings
 
-tasks:
-dont forget to return delay of acces token to 15min
-delete profile apis or not?
-
 in verify role and verifyJWT
 // const authHeader = req.headers.authorization || req.headers.Authorization;
 // if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
 // const token = authHeader.split(" ")[1];
 
-app.post('/auth/google/refresh-token', async (req, res) => {
-const user = new UserRefreshClient(
-clientId,
-clientSecret,
-req.body.refreshToken,
-);
-const { credentials } = await user.refreshAccessToken(); // optain new tokens
-res.json(credentials);
-})
+tasks:
+dont forget to return delay of acces token to 15min
+delete profile apis or not?
 
-TODO:!!!!!!!!!
--reset secure atribute to true when sending cookies
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client();
+async function verify() {
+const ticket = await client.verifyIdToken({
+idToken: token,
+audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+// Or, if multiple clients access the backend:
+//[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+});
+const payload = ticket.getPayload();
+const userid = payload['sub'];
+// If request specified a G Suite domain:
+// const domain = payload['hd'];
+}
+verify().catch(console.error);

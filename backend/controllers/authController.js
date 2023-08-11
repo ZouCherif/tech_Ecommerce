@@ -78,13 +78,13 @@ const handleGoogleAuth = async (req, res) => {
         refreshToken: decoded.refreshToken,
       });
     }
-    res.cookie("access_token", tokens.access_token, {
+    res.cookie("google_access_token", tokens.access_token, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge: 59 * 60 * 1000, // 59 minutes
     });
-    res.cookie("refresh_token", tokens.refresh_token, {
+    res.cookie("google_refresh_token", tokens.refresh_token, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
