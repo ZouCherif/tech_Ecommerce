@@ -57,6 +57,6 @@ export const {
   useLoginUserMutation,
   useForgotPasswordMutation,
   useGoogleAuthMutation,
-  useGoogleRefreshTokenMutation,
+  useRefreshTokenMutation,
   useLogoutUserMutation,
 } = apiSlice;

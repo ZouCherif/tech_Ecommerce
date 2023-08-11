@@ -1,11 +1,11 @@
 import {
-  useGoogleRefreshTokenMutation,
+  useRefreshTokenMutation,
   useLogoutUserMutation,
 } from "../api/apiSlice";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const [refreshGoogleToken] = useGoogleRefreshTokenMutation();
+  const [refreshGoogleToken] = useRefreshTokenMutation();
   const [logout] = useLogoutUserMutation();
   const navigate = useNavigate();
   const handlerefresh = async () => {
