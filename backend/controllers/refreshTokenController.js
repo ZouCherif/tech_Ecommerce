@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { UserRefreshClient } = require("google-auth-library");
 
 const handleRefreshToken = async (req, res) => {
+  console.log("Refresh token");
   const cookies = req.cookies;
   if (cookies?.refresh_token) {
     const refreshToken = cookies.refresh_token;

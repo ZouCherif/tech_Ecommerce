@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
+const User = require("../models/User");
 
 const verifyJWT = async (req, res, next) => {
   console.log("verifying JWT");
@@ -18,20 +19,24 @@ const verifyJWT = async (req, res, next) => {
   } else if (req.cookies?.google_access_token) {
     const token = req.cookies.google_access_token;
     try {
-      const client = new OAuth2Client();
-      const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      console.log("ticket:", ticket);
-      const payload = ticket.getPayload();
-      console.log("payload:", payload);
-      const userid = payload["sub"];
-      // If request specified a G Suite domain:
-      // const domain = payload['hd'];
+      const oAuth2Client = new OAuth2Client(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        "postmessage"
+      );
+      const tokenInfo = await oAuth2Client.getTokenInfo(token);
+      const user = await User.findOne({ sub: tokenInfo.sub }).exec();
+      if (!user || user.email !== tokenInfo.email)
+        return res.status(403).json({ message: "Invalid token" });
+      req.userId = user._id;
+      req.email = tokenInfo.email;
+      req.roles = user.roles;
+      next();
     } catch (err) {
       console.error(err);
     }
+  } else {
+    res.status(403).json({ message: "Invalid token" });
   }
 };
 

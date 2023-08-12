@@ -75,7 +75,8 @@ const handleGoogleAuth = async (req, res) => {
       const result = await User.create({
         email: decoded.email,
         username: decoded.name,
-        refreshToken: decoded.refreshToken,
+        refreshToken: tokens.refresh_token,
+        sub: decoded.sub,
       });
     }
     res.cookie("google_access_token", tokens.access_token, {
