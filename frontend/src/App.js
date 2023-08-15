@@ -4,6 +4,7 @@ import Register from "./features/User/Register";
 import ForgotPassword from "./features/User/ForgotPassword";
 import SharedLayout from "./components/SharedLayout";
 import Home from "./pages/Home";
+import ResetPassword from "./features/User/ResetPassword";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="auth" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="forgotpassword" element={<ForgotPassword />} />
+        <Route path="resetpassword/:token" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

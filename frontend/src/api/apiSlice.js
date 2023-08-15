@@ -42,6 +42,13 @@ export const apiSlice = createApi({
         body: email,
       }),
     }),
+    resetPassword: builder.mutation({
+      query: (token, password) => ({
+        url: `/auth/resetPassword/${token}`,
+        method: "POST",
+        body: password,
+      }),
+    }),
     logoutUser: builder.mutation({
       query: () => ({
         url: "/logout",
@@ -59,4 +66,5 @@ export const {
   useGoogleAuthMutation,
   useRefreshTokenMutation,
   useLogoutUserMutation,
+  useResetPasswordMutation,
 } = apiSlice;

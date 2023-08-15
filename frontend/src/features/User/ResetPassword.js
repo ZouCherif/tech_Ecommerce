@@ -1,36 +1,28 @@
 import { useState } from "react";
-import { useForgotPasswordMutation } from "../../api/apiSlice";
+import { useResetPasswordMutation } from "../../api/apiSlice";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
+import { useParams } from "react-router-dom";
 
-function ForgotPassword() {
-  const [email, setEmail] = useState("");
-  const [forgotPassword, { isLoading, isSuccess }] =
-    useForgotPasswordMutation();
-  const [emailError, setEmailError] = useState("");
+function ResetPassword() {
+  const { token } = useParams();
+  const [password, setPwd] = useState("");
   const [serverError, setServerError] = useState("");
-
+  const [resetPassword, { isLoading, isSuccess }] = useResetPasswordMutation();
   const handleOnChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    setPwd(e.target.value);
   };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
-    if (!email) return;
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
+    if (!password) {
+      setServerError("password is required");
       return;
     }
-    setEmailError("");
     try {
-      const result = await forgotPassword({ email }).unwrap();
-      setEmail("");
+      const result = await resetPassword(token, password).unwrap();
+      setPwd("");
       console.log(result);
     } catch (err) {
       if (err.data?.message !== undefined) {
@@ -51,32 +43,23 @@ function ForgotPassword() {
           className="flex flex-col ss:w-2/3 ss:p-4 mx-auto tracking-widest"
           onSubmit={handleOnSubmit}
         >
-          <p className="text-center text-sm mb-6">
-            Enter the email address associated with your account and we will
-            send you a link to reset your password.
-          </p>
+          <p className="text-center text-sm mb-6">Enter the new password.</p>
           <label
             htmlFor="email"
             className="text-gray-500 mb-2 ss:text-sm text-xs font-semibold"
           >
-            EMAIL ADDRESS:
+            PASSWORD
           </label>
           <input
-            type="text"
-            placeholder="example@campany.com"
-            name="email"
-            id="email"
-            value={email}
+            type="password"
+            placeholder=""
+            name="password"
+            id="pawword"
+            value={password}
             required
             onChange={handleOnChange}
-            autoComplete="email"
-            className={`border-2 border-gray-300 p-2 ${
-              emailError ? "mb-1" : "mb-6"
-            }`}
+            className={`border-2 border-gray-300 p-2 mb-4`}
           />
-          {emailError && (
-            <div className="text-red-500 text-xs mb-4">{emailError}</div>
-          )}
           {serverError && (
             <div className="text-red-500 text-sm mb-1 flex items-center justify-center animate-custom-bounce">
               <IoAlertCircleSharp size={20} className="mr-1" />
@@ -96,7 +79,7 @@ function ForgotPassword() {
               )}
             </button>
           ) : (
-            <p>An email was sent to you </p>
+            <p>password reset successfully</p>
           )}
         </form>
       </div>
@@ -104,4 +87,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ResetPassword;

@@ -14,6 +14,11 @@ const sendResetPasswordEmail = async (email, token) => {
     auth: {
       user: process.env.SEND_EMAIL,
       pass: process.env.EMAIL_PWD,
+      // type: "OAuth2",
+      // user: process.env.SEND_EMAIL,
+      // clientId: process.env.GOOGLE_CLIENT_ID,
+      // clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      // refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
     },
   });
 
@@ -21,7 +26,7 @@ const sendResetPasswordEmail = async (email, token) => {
     from: process.env.SEND_EMAIL,
     to: email,
     subject: "Password Reset Request",
-    html: `<p>Please click the following link to reset your password: <a href="http://your_website/resetPassword/${token}">Reset Password</a></p>`,
+    html: `<p>Please click the following link to reset your password: <a href="http://localhost:3000/resetPassword/${token}">Reset Password</a></p>`,
   };
 
   await transporter.sendMail(mailOptions);
