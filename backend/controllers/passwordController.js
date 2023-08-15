@@ -14,11 +14,6 @@ const sendResetPasswordEmail = async (email, token) => {
     auth: {
       user: process.env.SEND_EMAIL,
       pass: process.env.EMAIL_PWD,
-      // type: "OAuth2",
-      // user: process.env.SEND_EMAIL,
-      // clientId: process.env.GOOGLE_CLIENT_ID,
-      // clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
     },
   });
 
@@ -45,7 +40,6 @@ const forgotPassword = async (req, res) => {
     const resetToken = generateToken();
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-
     await user.save();
 
     // Send reset password email
@@ -71,10 +65,8 @@ const resetPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Invalid or expired token" });
     }
-
     // Reset token is valid, so update the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;

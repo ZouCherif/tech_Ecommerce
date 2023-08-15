@@ -21,7 +21,7 @@ function ResetPassword() {
       return;
     }
     try {
-      const result = await resetPassword(token, password).unwrap();
+      const result = await resetPassword({ token, password }).unwrap();
       setPwd("");
       console.log(result);
     } catch (err) {
