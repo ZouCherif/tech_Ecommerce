@@ -30,8 +30,6 @@ function ForgotPassword() {
     setEmailError("");
     try {
       const result = await forgotPassword({ email }).unwrap();
-      setEmail("");
-      console.log(result);
     } catch (err) {
       if (err.data?.message !== undefined) {
         setServerError(err.data.message);
@@ -68,6 +66,7 @@ function ForgotPassword() {
             id="email"
             value={email}
             required
+            disabled={isSuccess}
             onChange={handleOnChange}
             autoComplete="email"
             className={`border-2 border-gray-300 p-2 ${
@@ -96,7 +95,7 @@ function ForgotPassword() {
               )}
             </button>
           ) : (
-            <p>An email was sent to you </p>
+            <p>A reset password email was sent to you </p>
           )}
         </form>
       </div>

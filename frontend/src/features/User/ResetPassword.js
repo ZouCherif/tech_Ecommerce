@@ -56,6 +56,7 @@ function ResetPassword() {
             name="password"
             id="pawword"
             value={password}
+            disabled={isSuccess}
             required
             onChange={handleOnChange}
             className={`border-2 border-gray-300 p-2 mb-4`}
@@ -79,7 +80,12 @@ function ResetPassword() {
               )}
             </button>
           ) : (
-            <p>password reset successfully</p>
+            <div>
+              <p>password reset successfully</p>
+              <Link to="/auth" className="text-blue-500 hover:underline">
+                Login
+              </Link>
+            </div>
           )}
         </form>
       </div>
