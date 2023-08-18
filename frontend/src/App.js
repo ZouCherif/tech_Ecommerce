@@ -5,6 +5,7 @@ import ForgotPassword from "./features/User/ForgotPassword";
 import SharedLayout from "./components/SharedLayout";
 import Home from "./pages/Home";
 import ResetPassword from "./features/User/ResetPassword";
+import Err404 from "./pages/Err404";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Home />} />
+          <Route path="*" element={<Err404 />} />
         </Route>
         <Route path="auth" element={<Login />} />
         <Route path="register" element={<Register />} />
