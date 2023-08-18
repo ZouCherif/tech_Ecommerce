@@ -8,6 +8,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
 import { useGoogleLogin } from "@react-oauth/google";
+import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "./userSlice";
 
 function Login() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -21,6 +24,7 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -45,25 +49,27 @@ function Login() {
     }
     setEmailError("");
     try {
-      await loginUser(data).unwrap();
-      setData({ username: "", password: "" });
+      const userInfo = await loginUser(data).unwrap();
+      dispatch(setUserInfo(userInfo));
+      setData({ email: "", pwd: "" });
       navigate("/");
     } catch (err) {
-      setServerError(err.data.message);
+      setServerError(err.data?.message);
       console.error(err);
     }
   };
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
-      const tokens = await googleAuth({ code: codeResponse }).unwrap();
+      const userInfo = await googleAuth({ code: codeResponse }).unwrap();
+      dispatch(setUserInfo(userInfo));
       navigate("/");
     },
     flow: "auth-code",
   });
 
   return (
-    <div className="bg-stone-100 h-full select-none">
+    <div className="bg-stone-200 h-full select-none">
       <h1 className="font-bold text-4xl text-center py-10">LOGO</h1>
       <div className="sm:w-1/2 w-3/4 mx-auto bg-white py-10 tracking-widest">
         <form
@@ -166,15 +172,13 @@ function Login() {
         <h3 className="text-center font-semibold mb-4 p-4">
           LOGIN WITH GOOGLE ACCOUNT
         </h3>
-        {/* <div className="w-fit mx-auto">
-          <GoogleLogin
-            onSuccess={onGoogleLoginSuccess}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-          />
-        </div> */}
-        <button onClick={() => googleLogin()}>login</button>
+        <button
+          onClick={() => googleLogin()}
+          className="flex items-center bg-stone-200 p-2 shadow-md mx-auto border-[1px] border-black"
+        >
+          <FcGoogle size={20} className="mr-4" />
+          login with Google account
+        </button>
       </div>
     </div>
   );

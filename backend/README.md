@@ -147,3 +147,5 @@ const userid = payload['sub'];
 // const domain = payload['hd'];
 }
 verify().catch(console.error);
+
+handle when user register with google after he use normal auth

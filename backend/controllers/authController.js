@@ -52,7 +52,11 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
       domain: "localhost",
     });
-    res.json({ message: "successfully loged in" });
+    res.json({
+      message: "successfully loged in",
+      email: foundUser.email,
+      username: foundUser.username,
+    });
   } else {
     res.status(401).json({ message: "Invalid password" });
   }
@@ -90,7 +94,7 @@ const handleGoogleAuth = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ message: "logged in successfully" });
+    res.json({ email: decoded.email, username: decoded.name });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
