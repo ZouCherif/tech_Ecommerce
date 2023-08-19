@@ -56,6 +56,7 @@ const handleLogin = async (req, res) => {
       message: "successfully loged in",
       email: foundUser.email,
       username: foundUser.username,
+      roles: foundUser.roles,
     });
   } else {
     res.status(401).json({ message: "Invalid password" });
@@ -74,7 +75,7 @@ const handleGoogleAuth = async (req, res) => {
     const decoded = jwt_decode(tokens.id_token);
     const user = await User.findOne({ email: decoded.email }).exec();
     if (!user) {
-      const result = await User.create({
+      user = await User.create({
         email: decoded.email,
         username: decoded.name,
         refreshToken: tokens.refresh_token,
@@ -94,7 +95,11 @@ const handleGoogleAuth = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.json({ email: decoded.email, username: decoded.name });
+    res.json({
+      email: decoded.email,
+      username: decoded.name,
+      roles: user.roles,
+    });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/User");
+const { handleRefreshToken } = require("../controllers/refreshTokenController");
 
 const verifyJWT = async (req, res, next) => {
   console.log("verifying JWT");
@@ -36,7 +37,12 @@ const verifyJWT = async (req, res, next) => {
       console.error(err);
     }
   } else {
-    res.status(403).json({ message: "Invalid token" });
+    try {
+      await handleRefreshToken(req, res);
+      next();
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 

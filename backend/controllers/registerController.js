@@ -63,7 +63,12 @@ const handleNewUser = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // Expiry time in milliseconds
     });
     console.log(newUser);
-    res.status(201).json({ message: `New user ${username} created!` });
+    res.status(201).json({
+      message: `New user ${username} created!`,
+      email: email,
+      username,
+      roles,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

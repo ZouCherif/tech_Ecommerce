@@ -6,6 +6,8 @@ import SharedLayout from "./components/SharedLayout";
 import Home from "./pages/Home";
 import ResetPassword from "./features/User/ResetPassword";
 import Err404 from "./pages/Err404";
+import RequireAuth from "./features/User/RequireAuth";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -13,6 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Home />} />
+          <Route element={<RequireAuth allowedRoles={["admin"]} />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
           <Route path="*" element={<Err404 />} />
         </Route>
         <Route path="auth" element={<Login />} />

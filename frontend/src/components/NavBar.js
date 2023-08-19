@@ -12,6 +12,7 @@ const Navbar = () => {
     setToggleMenu((prevToggleMenu) => !prevToggleMenu);
   };
   const user = useSelector((state) => state.users.userInfo);
+  console.log(user);
   return (
     <nav className="text-black w-full relative">
       <div className="relative z-20 bg-stone-200">
