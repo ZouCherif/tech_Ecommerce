@@ -1,17 +1,15 @@
 import { FaSearch } from "react-icons/fa";
 import { AiOutlineShoppingCart, AiOutlineMenu } from "react-icons/ai";
 import { MdFavoriteBorder } from "react-icons/md";
-import { GoPerson } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import AccountBtn from "./AccountBtn";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const handleToggleMenu = () => {
     setToggleMenu((prevToggleMenu) => !prevToggleMenu);
   };
-  const user = useSelector((state) => state.users.userInfo?.username);
   return (
     <nav className="text-black w-full relative">
       <div className="relative z-20 bg-stone-200">
@@ -44,12 +42,7 @@ const Navbar = () => {
               <MdFavoriteBorder size={25} className="ss:mr-1" />
               <span className="ss:block hidden">Favorites</span>
             </Link>
-            <Link to="/auth" className="flex hover:text-gray-500 items-center">
-              <GoPerson size={25} className="ss:mr-1" />
-              <span className="ss:block hidden">
-                {user ? user : "Your account"}
-              </span>
-            </Link>
+            <AccountBtn />
           </div>
         </div>
         <div className="relative max-w-md mx-auto ss:hidden px-4 mb-2">

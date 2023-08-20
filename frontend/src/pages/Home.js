@@ -3,8 +3,11 @@ import {
   useLogoutUserMutation,
 } from "../api/apiSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearUserInfo } from "../features/User/userSlice";
 
 function Home() {
+  const dispatch = useDispatch();
   // const [refreshGoogleToken] = useRefreshTokenMutation();
   const [logout] = useLogoutUserMutation();
   const navigate = useNavigate();
@@ -20,6 +23,7 @@ function Home() {
   const handleLogout = async () => {
     try {
       await logout().unwrap();
+      dispatch(clearUserInfo());
       navigate("/auth");
     } catch (err) {
       console.log(err);

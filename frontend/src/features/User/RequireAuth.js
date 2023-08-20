@@ -1,9 +1,13 @@
+import React from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 
 function RequireAuth({ allowedRoles }) {
   const location = useLocation();
-  const roles = useSelector((state) => state.users.userInfo?.roles);
+  const roles = useSelector(
+    (state) => state.users.userInfo?.roles,
+    shallowEqual
+  );
 
   if (!roles) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
@@ -18,4 +22,4 @@ function RequireAuth({ allowedRoles }) {
   }
 }
 
-export default RequireAuth;
+export default React.memo(RequireAuth);
