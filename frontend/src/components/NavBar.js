@@ -11,8 +11,7 @@ const Navbar = () => {
   const handleToggleMenu = () => {
     setToggleMenu((prevToggleMenu) => !prevToggleMenu);
   };
-  const user = useSelector((state) => state.users.userInfo);
-  console.log(user);
+  const user = useSelector((state) => state.users.userInfo?.username);
   return (
     <nav className="text-black w-full relative">
       <div className="relative z-20 bg-stone-200">
@@ -48,7 +47,7 @@ const Navbar = () => {
             <Link to="/auth" className="flex hover:text-gray-500 items-center">
               <GoPerson size={25} className="ss:mr-1" />
               <span className="ss:block hidden">
-                {user?.username ? user.username : "Your account"}
+                {user ? user : "Your account"}
               </span>
             </Link>
           </div>

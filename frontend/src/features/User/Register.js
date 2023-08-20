@@ -3,6 +3,8 @@ import { useRegisterNewUserMutation } from "../../api/apiSlice";
 import { useNavigate, Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "./userSlice";
 
 function Register() {
   const [addNewUser, { isLoading, error }] = useRegisterNewUserMutation();
@@ -16,6 +18,7 @@ function Register() {
   const navigate = useNavigate();
   const [emailError, setEmailError] = useState("");
   const [serverError, setServerError] = useState("");
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +49,7 @@ function Register() {
     setServerError("");
     try {
       const response = await addNewUser(data).unwrap();
-      console.log(response);
+      dispatch(setUserInfo(userInfo));
       setData({
         email: "",
         username: "",
