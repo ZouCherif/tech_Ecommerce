@@ -4,6 +4,26 @@ const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
 const { OAuth2Client } = require("google-auth-library");
 
+const generateTokens = (id, email, username, roles) => {
+  const accessToken = jwt.sign(
+    {
+      UserInfo: {
+        id,
+        email,
+        username,
+        roles,
+      },
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "59m" }
+  );
+  const refreshToken = jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "1d",
+  });
+
+  return { accessToken, refreshToken };
+};
+
 const handleLogin = async (req, res) => {
   const { email, pwd } = req.body;
   if (!email || !pwd)
@@ -18,21 +38,11 @@ const handleLogin = async (req, res) => {
   if (match) {
     const roles = Object.values(foundUser.roles).filter(Boolean);
     // create JWTs
-    const accessToken = jwt.sign(
-      {
-        UserInfo: {
-          id: foundUser._id,
-          email: foundUser.email,
-          roles: roles,
-        },
-      },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "59m" }
-    );
-    const refreshToken = jwt.sign(
-      { email: foundUser.email },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1d" }
+    const { accessToken, refreshToken } = generateTokens(
+      foundUser._id,
+      foundUser.email,
+      foundUser.username,
+      roles
     );
     // Saving refreshToken with current user
     foundUser.refreshToken = refreshToken;
@@ -54,9 +64,7 @@ const handleLogin = async (req, res) => {
     });
     res.json({
       message: "successfully loged in",
-      email: foundUser.email,
-      username: foundUser.username,
-      roles: foundUser.roles,
+      accessToken,
     });
   } else {
     res.status(401).json({ message: "Invalid password" });
@@ -71,34 +79,40 @@ const handleGoogleAuth = async (req, res) => {
       process.env.GOOGLE_CLIENT_SECRET,
       "postmessage"
     );
-    const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
+    const { tokens } = await oAuth2Client.getToken(req.body.code);
     const decoded = jwt_decode(tokens.id_token);
     const user = await User.findOne({ email: decoded.email }).exec();
     if (!user) {
       user = await User.create({
         email: decoded.email,
         username: decoded.name,
-        refreshToken: tokens.refresh_token,
-        sub: decoded.sub,
       });
     }
-    res.cookie("google_access_token", tokens.access_token, {
+    const { accessToken, refreshToken } = generateTokens(
+      user._id,
+      user.email,
+      user.username,
+      user.roles
+    );
+
+    user.refreshToken = refreshToken;
+    const result = await user.save();
+
+    res.cookie("access_token", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge: 59 * 60 * 1000, // 59 minutes
     });
-    res.cookie("google_refresh_token", tokens.refresh_token, {
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000,
     });
-
     res.json({
-      email: decoded.email,
-      username: decoded.name,
-      roles: user.roles,
+      message: "successfully loged in",
+      accessToken,
     });
   } catch (err) {
     res.status(500).send({ message: err.message });

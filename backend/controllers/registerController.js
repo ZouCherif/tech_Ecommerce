@@ -23,7 +23,6 @@ const handleNewUser = async (req, res) => {
       email,
       password: hashedPwd,
     });
-
     // Generate JWTs
     const roles = Object.values(newUser.roles).filter(Boolean);
     const accessToken = jwt.sign(
@@ -31,6 +30,7 @@ const handleNewUser = async (req, res) => {
         UserInfo: {
           id: newUser._id,
           email: newUser.email,
+          username: newUser.username,
           roles: roles,
         },
       },
@@ -62,12 +62,9 @@ const handleNewUser = async (req, res) => {
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000, // Expiry time in milliseconds
     });
-    console.log(newUser);
     res.status(201).json({
       message: `New user ${username} created!`,
-      email: email,
-      username,
-      roles,
+      accessToken,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });

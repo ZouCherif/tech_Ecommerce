@@ -28,13 +28,13 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     }),
-    // RefreshToken: builder.mutation({
-    //   query: () => ({
-    //     url: "/refresh",
-    //     method: "GET",
-    //     credentials: "include",
-    //   }),
-    // }),
+    RefreshToken: builder.mutation({
+      query: () => ({
+        url: "/refresh",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
     forgotPassword: builder.mutation({
       query: (email) => ({
         url: "/auth/forgotpassword",
@@ -64,7 +64,7 @@ export const {
   useLoginUserMutation,
   useForgotPasswordMutation,
   useGoogleAuthMutation,
-  // useRefreshTokenMutation,
+  useRefreshTokenMutation,
   useLogoutUserMutation,
   useResetPasswordMutation,
 } = apiSlice;

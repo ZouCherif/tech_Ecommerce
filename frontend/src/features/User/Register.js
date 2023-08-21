@@ -48,8 +48,8 @@ function Register() {
     }
     setServerError("");
     try {
-      const response = await addNewUser(data).unwrap();
-      dispatch(setUserInfo(userInfo));
+      const { accessToken } = await addNewUser(data).unwrap();
+      dispatch(setUserInfo({ accessToken }));
       setData({
         email: "",
         username: "",

@@ -49,8 +49,8 @@ function Login() {
     }
     setEmailError("");
     try {
-      const userInfo = await loginUser(data).unwrap();
-      dispatch(setUserInfo(userInfo));
+      const { accessToken } = await loginUser(data).unwrap();
+      dispatch(setUserInfo({ accessToken }));
       setData({ email: "", pwd: "" });
       navigate("/");
     } catch (err) {
@@ -61,8 +61,8 @@ function Login() {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
-      const userInfo = await googleAuth({ code: codeResponse }).unwrap();
-      dispatch(setUserInfo(userInfo));
+      const { accessToken } = await googleAuth({ code: codeResponse }).unwrap();
+      dispatch(setUserInfo(accessToken));
       navigate("/");
     },
     flow: "auth-code",

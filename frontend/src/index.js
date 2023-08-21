@@ -6,12 +6,13 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./app/store";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<ClipLoader size={50} />} persistor={persistor}>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
           <App />
         </GoogleOAuthProvider>

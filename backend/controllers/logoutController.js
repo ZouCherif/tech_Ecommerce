@@ -1,35 +1,18 @@
 const User = require("../models/User");
 
 const handleLogout = async (req, res) => {
-  const cookies = req.cookies;
-  let refreshToken;
-  if (cookies?.refresh_token) {
-    refreshToken = cookies.refresh_token;
-    res.clearCookie("refresh_token", {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-    });
-    res.clearCookie("access_token", {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-    });
-  } else if (cookies?.google_refresh_token) {
-    refreshToken = cookies.google_refresh_token;
-    res.clearCookie("google_refresh_token", {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-    });
-    res.clearCookie("google_access_token", {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-    });
-  } else {
-    return res.sendStatus(204);
-  }
+  const refreshToken = req.cookies.refresh_token;
+  if (!refreshToken) return res.sendStatus(204);
+  res.clearCookie("refresh_token", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
 
   const foundUser = await User.findOne({ refreshToken }).exec();
 
