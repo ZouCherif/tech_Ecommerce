@@ -5,6 +5,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "./userSlice";
+import GoogleOauth from "./GoogleOauth";
 
 function Register() {
   const [addNewUser, { isLoading, error }] = useRegisterNewUserMutation();
@@ -187,9 +188,7 @@ function Register() {
         <h3 className="text-center font-semibold mb-4 p-4">
           REGISTER WITH GOOGLE ACCOUNT
         </h3>
-        <div className="border-2 text-center px-2 py-4 w-1/3 mx-auto bg-green-400">
-          GOOGLE
-        </div>
+        <GoogleOauth />
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import ResetPassword from "./features/User/ResetPassword";
 import Err404 from "./pages/Err404";
 import RequireAuth from "./features/User/RequireAuth";
 import Dashboard from "./pages/Dashboard";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
@@ -20,8 +21,26 @@ function App() {
           </Route>
           <Route path="*" element={<Err404 />} />
         </Route>
-        <Route path="auth" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route
+          path="auth"
+          element={
+            <GoogleOAuthProvider
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            >
+              <Login />
+            </GoogleOAuthProvider>
+          }
+        />
+        <Route
+          path="register"
+          element={
+            <GoogleOAuthProvider
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            >
+              <Register />
+            </GoogleOAuthProvider>
+          }
+        />
         <Route path="forgotpassword" element={<ForgotPassword />} />
         <Route path="resetpassword/:token" element={<ResetPassword />} />
       </Routes>
