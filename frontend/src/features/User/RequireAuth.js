@@ -6,7 +6,7 @@ function RequireAuth({ allowedRoles }) {
   const { roles } = useAuth();
 
   if (!roles) {
-    return <Navigate to="/auth" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   const hasAllowedRole = roles.some((role) => allowedRoles.includes(role));
@@ -14,7 +14,7 @@ function RequireAuth({ allowedRoles }) {
   if (hasAllowedRole) {
     return <Outlet />;
   } else {
-    return <Navigate to="/auth" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 }
 

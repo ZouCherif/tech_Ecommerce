@@ -81,7 +81,7 @@ const handleGoogleAuth = async (req, res) => {
     );
     const { tokens } = await oAuth2Client.getToken(req.body.code);
     const decoded = jwt_decode(tokens.id_token);
-    const user = await User.findOne({ email: decoded.email }).exec();
+    let user = await User.findOne({ email: decoded.email }).exec();
     if (!user) {
       user = await User.create({
         email: decoded.email,

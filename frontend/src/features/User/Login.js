@@ -62,7 +62,7 @@ function Login() {
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       const { accessToken } = await googleAuth({ code: codeResponse }).unwrap();
-      dispatch(setUserInfo(accessToken));
+      dispatch(setUserInfo({ accessToken }));
       navigate("/");
     },
     flow: "auth-code",
