@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./app/store";
@@ -13,9 +12,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={<ClipLoader size={50} />} persistor={persistor}>
-        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-          <App />
-        </GoogleOAuthProvider>
+        <App />
       </PersistGate>
     </Provider>
   </React.StrictMode>

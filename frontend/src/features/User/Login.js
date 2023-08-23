@@ -7,7 +7,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ClipLoader from "react-spinners/ClipLoader";
 import { IoAlertCircleSharp } from "react-icons/io5";
-import { useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "./userSlice";
@@ -58,15 +58,6 @@ function Login() {
       console.error(err);
     }
   };
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (codeResponse) => {
-      const { accessToken } = await googleAuth({ code: codeResponse }).unwrap();
-      dispatch(setUserInfo({ accessToken }));
-      navigate("/");
-    },
-    flow: "auth-code",
-  });
 
   return (
     <div className="bg-stone-200 h-full select-none">
@@ -172,13 +163,26 @@ function Login() {
         <h3 className="text-center font-semibold mb-4 p-4">
           LOGIN WITH GOOGLE ACCOUNT
         </h3>
-        <button
-          onClick={() => googleLogin()}
-          className="flex items-center bg-stone-200 p-2 shadow-md mx-auto border-[1px] border-black"
-        >
-          <FcGoogle size={20} className="mr-4" />
-          login with Google account
-        </button>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+          <button
+            onClick={() => {
+              useGoogleLogin({
+                onSuccess: async (codeResponse) => {
+                  const { accessToken } = await googleAuth({
+                    code: codeResponse,
+                  }).unwrap();
+                  dispatch(setUserInfo({ accessToken }));
+                  navigate("/");
+                },
+                flow: "auth-code",
+              });
+            }}
+            className="flex items-center bg-stone-200 p-2 shadow-md mx-auto border-[1px] border-black"
+          >
+            <FcGoogle size={20} className="mr-4" />
+            login with Google account
+          </button>
+        </GoogleOAuthProvider>
       </div>
     </div>
   );
