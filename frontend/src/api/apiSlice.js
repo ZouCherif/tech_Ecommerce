@@ -1,8 +1,40 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setUserInfo, clearUserInfo } from "../features/User/userSlice";
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://localhost:3500",
+  credentials: "include",
+});
+
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  if (result?.error?.status === 401) {
+    console.log("sending refresh token");
+
+    const refreshResult = await baseQuery("/refresh", api, extraOptions);
+    console.log(refreshResult);
+
+    if (refreshResult?.data?.accessToken) {
+      api.dispatch(
+        setUserInfo({ accessToken: refreshResult.data.accessToken })
+      );
+
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      if (refreshResult?.error?.status === 403) {
+        refreshResult.error.data.message = "Your login has expired.";
+        api.dispatch(clearUserInfo());
+        // window.location.href = "/auth";
+      }
+      return refreshResult;
+    }
+  }
+
+  return result;
+};
 
 export const apiSlice = createApi({
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3500" }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     registerNewUser: builder.mutation({
       query: (credentials) => ({
@@ -56,6 +88,17 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     }),
+    getCategories: builder.query({
+      query: () => "/categories",
+    }),
+    addNewCategory: builder.mutation({
+      query: (data) => ({
+        url: "/categories",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -67,4 +110,7 @@ export const {
   useRefreshTokenMutation,
   useLogoutUserMutation,
   useResetPasswordMutation,
+
+  useGetCategoriesQuery,
+  useAddNewCategoryMutation,
 } = apiSlice;
