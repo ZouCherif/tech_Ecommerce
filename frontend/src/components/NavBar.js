@@ -11,7 +11,7 @@ const Navbar = () => {
     setToggleMenu((prevToggleMenu) => !prevToggleMenu);
   };
   return (
-    <nav className="text-black w-full relative">
+    <nav className="text-black w-full relative custom-font">
       <div className="relative z-20 bg-stone-200">
         <div className="container mx-auto flex justify-between items-center py-3 max-w-[1200px] ss:px-6 px-4">
           <div className="text-xl font-bold mr-2 flex items-center">

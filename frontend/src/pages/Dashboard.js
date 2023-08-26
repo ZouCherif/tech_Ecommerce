@@ -1,5 +1,6 @@
 import AdminNavbar from "../components/AdminNavbar";
 import { Outlet, useLocation } from "react-router-dom";
+
 function Dashboard() {
   const location = useLocation();
   return (

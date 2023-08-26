@@ -58,7 +58,7 @@ function Home() {
     }
   };
   return (
-    <div>
+    <div className="custom-font">
       {/* <button onClick={handlerefresh}>refresh</button> */}
       <input
         placeholder="name"

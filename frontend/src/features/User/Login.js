@@ -54,7 +54,7 @@ function Login() {
   };
 
   return (
-    <div className="bg-stone-200 h-full select-none">
+    <div className="bg-stone-200 h-full select-none custom-font">
       <h1 className="font-bold text-4xl text-center py-10">LOGO</h1>
       <div className="sm:w-1/2 w-3/4 mx-auto bg-white py-10 tracking-widest">
         <form

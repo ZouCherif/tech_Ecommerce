@@ -35,7 +35,7 @@ function ResetPassword() {
   };
 
   return (
-    <div className="bg-stone-100 h-screen select-none flex justify-center">
+    <div className="bg-stone-100 h-screen select-none flex justify-center custom-font">
       <div className="sm:w-1/2 w-3/4 bg-white px-4">
         <h1 className="font-bold text-4xl text-center py-6">LOGO</h1>
         <hr className="border-black mb-4" />
