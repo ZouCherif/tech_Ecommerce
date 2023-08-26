@@ -9,6 +9,8 @@ import Err404 from "./pages/Err404";
 import RequireAuth from "./features/User/RequireAuth";
 import Dashboard from "./pages/Dashboard";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Overview from "./pages/dashboard/Overview";
+import Products from "./pages/dashboard/Products";
 
 function App() {
   return (
@@ -16,11 +18,16 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Home />} />
-          <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="dashboard" element={<Dashboard />} />
-          </Route>
           <Route path="*" element={<Err404 />} />
         </Route>
+        {/* <Route element={<RequireAuth allowedRoles={["admin"]} />}> */}
+        <Route path="dashboard" element={<Dashboard />}>
+          <Route path="overview" element={<Overview />} />
+          <Route path="products" element={<Products />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="orders" element={<Orders />} />
+        </Route>
+        {/* </Route> */}
         <Route
           path="auth"
           element={
