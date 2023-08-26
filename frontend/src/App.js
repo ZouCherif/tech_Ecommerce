@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Overview from "./pages/dashboard/Overview";
 import Products from "./pages/dashboard/Products";
+import Categories from "./pages/dashboard/Categories";
+import Orders from "./pages/dashboard/Orders";
 
 function App() {
   return (
