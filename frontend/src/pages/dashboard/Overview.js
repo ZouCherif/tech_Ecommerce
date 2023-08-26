@@ -9,6 +9,9 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  PieChart,
+  Pie,
+  PolarGrid,
 } from "recharts";
 
 function Overview() {
@@ -25,6 +28,34 @@ function Overview() {
     { name: "oct", revenue: 240, orders: 70 },
     { name: "sep", revenue: 280, orders: 64 },
     { name: "dec", revenue: 311, orders: 71 },
+  ];
+
+  const data0 = [
+    {
+      name: "Group A",
+      value: 400,
+      fill: "#54FF24",
+    },
+    {
+      name: "Group B",
+      value: 300,
+      fill: "#eb4034",
+    },
+    {
+      name: "Group C",
+      value: 120,
+      fill: "#349feb",
+    },
+    {
+      name: "Group D",
+      value: 30,
+      fill: "#190830",
+    },
+    {
+      name: "Group E",
+      value: 550,
+      fill: "#37472e",
+    },
   ];
   return (
     <div className="w-full bg-white py-4 px-6 rounded-md">
@@ -62,16 +93,36 @@ function Overview() {
           <p className="text-sm px-2">1.5% {"  "} -33 this week</p>
         </div>
       </section>
-      <section className="">
-        <LineChart width={600} height={300} data={data}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Line type="monotone" dataKey="revenue" stroke="#2196F3" />
-          <Line type="monotone" dataKey="orders" stroke="#F44236" />
-        </LineChart>
+      <section className="flex items-center justify-between">
+        <div>
+          <h2 className="mb-2 font-semibold">Revenue vs Orders</h2>
+          <LineChart width={600} height={300} data={data}>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Line type="monotone" dataKey="revenue" stroke="#2196F3" />
+            <Line type="monotone" dataKey="orders" stroke="#F44236" />
+          </LineChart>
+        </div>
+        <div>
+          <h2 className="mb-2 font-semibold">Sales By Category</h2>
+          <PieChart width={300} height={300}>
+            <Pie
+              data={data0}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              fill="#82ca9d"
+              label
+            />
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </div>
       </section>
     </div>
   );
