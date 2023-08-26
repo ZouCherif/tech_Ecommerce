@@ -1,18 +1,30 @@
 import AdminNavbar from "../components/AdminNavbar";
 import { Outlet, useLocation } from "react-router-dom";
+import { IoNotificationsOutline, IoSearchOutline } from "react-icons/io5";
+import { BsPersonCircle } from "react-icons/bs";
 
 function Dashboard() {
   const location = useLocation();
   return (
-    <div className="flex bg-stone-100">
+    <div className="flex bg-stone-100 overflow-hidden">
       <AdminNavbar />
-      <div className="w-full p-4">
-        <h1 className="bg-white rounded-xl mb-4 text-4xl p-4 w-full">
-          {location.pathname.slice(
-            location.pathname.lastIndexOf("/") + 1,
-            location.pathname.length
-          )}
-        </h1>
+      <div className="grow ml-[20%] p-4">
+        <div className="flex justify-between py-3 px-4 bg-white rounded-xl mb-4 items-center">
+          <h1 className=" text-4xl">
+            {location.pathname.slice(
+              location.pathname.lastIndexOf("/") + 1,
+              location.pathname.length
+            )}
+          </h1>
+          <div className="flex items-center">
+            <IoSearchOutline size={20} className="mr-6" />
+            <IoNotificationsOutline size={20} className="mr-6" />
+            <p className="text-base font-semibold flex items-center">
+              <BsPersonCircle size={20} className="mr-2" />
+              Your Account
+            </p>
+          </div>
+        </div>
         <Outlet />
       </div>
     </div>

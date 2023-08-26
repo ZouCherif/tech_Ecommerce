@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 function AdminNavbar() {
   return (
-    <nav className="h-screen border-r-2 bg-white border-stone-300 pl-4 pr-2 py-2 w-1/5 flex flex-col justify-between">
+    <nav className="h-screen border-r-2 bg-white border-stone-300 pl-4 pr-2 py-2 w-1/5 flex flex-col justify-between fixed top-0 left-0 z-10">
       <div>
         <h1 className="font-bold text-2xl py-3">LOGO</h1>
         <hr className="mb-4 border-[1px] border-stone-300" />

@@ -1,4 +1,4 @@
-import { FaSearch } from "react-icons/fa";
+import { IoSearchOutline } from "react-icons/io5";
 import { AiOutlineShoppingCart, AiOutlineMenu } from "react-icons/ai";
 import { MdFavoriteBorder } from "react-icons/md";
 import { Link } from "react-router-dom";
