@@ -29,7 +29,7 @@ const Navbar = () => {
                 placeholder="Search products..."
                 className="py-2 px-4 pr-10 text-gray-700 w-64 sm:w-80 focus:outline-none bg-white border border-gray-300 rounded-full transition-all duration-300 focus:ring-2 focus:ring-indigo-300"
               />
-              <FaSearch
+              <IoSearchOutline
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 size={20}
               />
@@ -51,7 +51,7 @@ const Navbar = () => {
             placeholder="Search products..."
             className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-white border border-gray-300 rounded-full transition-all duration-300 focus:ring-2 focus:ring-indigo-300"
           />
-          <FaSearch
+          <IoSearchOutline
             className="absolute right-7 top-1/2 transform -translate-y-1/2 text-gray-400"
             size={20}
           />

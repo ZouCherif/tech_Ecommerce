@@ -6,15 +6,12 @@ import { BsPersonCircle } from "react-icons/bs";
 function Dashboard() {
   const location = useLocation();
   return (
-    <div className="flex bg-stone-100 overflow-hidden">
+    <div className="flex bg-stone-100 h-screen">
       <AdminNavbar />
       <div className="grow ml-[20%] p-4">
         <div className="flex justify-between py-3 px-4 bg-white rounded-xl mb-4 items-center">
-          <h1 className=" text-4xl">
-            {location.pathname.slice(
-              location.pathname.lastIndexOf("/") + 1,
-              location.pathname.length
-            )}
+          <h1 className=" text-3xl">
+            {location.pathname.split("/").slice(2).join("/")}
           </h1>
           <div className="flex items-center">
             <IoSearchOutline size={20} className="mr-6" />

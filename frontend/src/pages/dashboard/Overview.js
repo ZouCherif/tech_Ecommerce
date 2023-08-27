@@ -67,7 +67,18 @@ function Overview() {
             <ImCoinDollar className="mr-2" size={18} />
             Total Sales
           </h2>
-          <p className="px-2 text-3xl font-bold mb-4">$1815.154</p>
+          <div className="flex justify-between items-start ">
+            <p className="px-2 text-3xl font-bold">$1815.154</p>
+            <LineChart width={70} height={50} data={data}>
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#2196F3"
+                dot={false}
+                strokeWidth={3}
+              />
+            </LineChart>
+          </div>
           <p className="text-sm px-2">20.9% {"  "} +18.4k this week</p>
         </div>
         <div className="w-1/4 border-r-2 p-2">
@@ -75,7 +86,18 @@ function Overview() {
             <VscPerson className="mr-2" size={20} />
             Visitors
           </h2>
-          <p className="px-2 text-3xl font-bold mb-4">151106</p>
+          <div className="flex justify-between items-start ">
+            <p className="px-2 text-3xl font-bold">151106</p>
+            <LineChart width={70} height={50} data={data}>
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#2196F3"
+                dot={false}
+                strokeWidth={3}
+              />
+            </LineChart>
+          </div>
           <p className="text-sm px-2">2.9% {"  "} +9.4k this week</p>
         </div>
         <div className="w-1/4 border-r-2 p-2">
@@ -83,7 +105,18 @@ function Overview() {
             <VscStarEmpty className="mr-2" size={20} />
             Total Orders
           </h2>
-          <p className="px-2 text-3xl font-bold mb-4">1252</p>
+          <div className="flex justify-between items-start ">
+            <p className="px-2 text-3xl font-bold mb-4">1252</p>
+            <LineChart width={70} height={50} data={data}>
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#2196F3"
+                dot={false}
+                strokeWidth={3}
+              />
+            </LineChart>
+          </div>
           <p className="text-sm px-2">0.9% {"  "} +0.4k this week</p>
         </div>
         <div className="w-1/4 p-2">
@@ -91,7 +124,18 @@ function Overview() {
             <RiArrowGoBackFill className="mr-2" size={15} />
             Refunded
           </h2>
-          <p className="px-2 text-3xl font-bold mb-4">221</p>
+          <div className="flex justify-between items-start ">
+            <p className="px-2 text-3xl font-bold mb-4">221</p>
+            <LineChart width={70} height={50} data={data}>
+              <Line
+                type="monotone"
+                dataKey="orders"
+                stroke="#F44236"
+                dot={false}
+                strokeWidth={3}
+              />
+            </LineChart>
+          </div>
           <p className="text-sm px-2">1.5% {"  "} -33 this week</p>
         </div>
       </section>

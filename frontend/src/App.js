@@ -13,6 +13,7 @@ import Overview from "./pages/dashboard/Overview";
 import Products from "./pages/dashboard/Products";
 import Categories from "./pages/dashboard/Categories";
 import Orders from "./pages/dashboard/Orders";
+import AddNewCategory from "./pages/dashboard/AddNewCategory";
 
 function App() {
   return (
@@ -26,7 +27,10 @@ function App() {
         <Route path="dashboard" element={<Dashboard />}>
           <Route path="overview" element={<Overview />} />
           <Route path="products" element={<Products />} />
-          <Route path="categories" element={<Categories />} />
+          <Route path="categories">
+            <Route index element={<Categories />} />
+            <Route path="addNewCategory" element={<AddNewCategory />} />
+          </Route>
           <Route path="orders" element={<Orders />} />
         </Route>
         {/* </Route> */}
