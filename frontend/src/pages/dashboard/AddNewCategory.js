@@ -1,6 +1,8 @@
 import { useAddNewCategoryMutation } from "../../api/apiSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Dropzone from "react-dropzone";
+import { AiOutlineUpload } from "react-icons/ai";
 // import { useDispatch } from "react-redux";
 // import { clearUserInfo, setUserInfo } from "../features/User/userSlice";
 
@@ -47,6 +49,23 @@ function AddNewCategory() {
           placeholder="T-shirts, Shoes..."
           className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 my-2"
         />
+        <h2 className="font-semibold">Upload Pictures:</h2>
+        <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+          {({ getRootProps, getInputProps }) => (
+            <section>
+              <div
+                {...getRootProps()}
+                className="bg-stone-100 w-1/2 rounded-lg font-semibold p-6 mx-auto my-4 h-40 flex justify-center items-center border-2 border-stone-500 border-dashed"
+              >
+                <input {...getInputProps()} />
+                <p className="flex">
+                  <AiOutlineUpload size={20} className="mr-2" />
+                  Drag and drop some files here, or click to select files
+                </p>
+              </div>
+            </section>
+          )}
+        </Dropzone>
         <label htmlFor="Description" className="font-semibold">
           {" "}
           Descrption:
