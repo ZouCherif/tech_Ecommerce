@@ -16,10 +16,7 @@ function Home() {
   const [logout] = useLogoutUserMutation();
   const [addCategory] = useAddNewCategoryMutation();
   const navigate = useNavigate();
-  const [dataCat, setData] = useState({
-    name: "",
-    description: "",
-  });
+
   // const handlerefresh = async () => {
   //   try {
   //     const { accessToken } = await refreshToken().unwrap();
@@ -38,16 +35,6 @@ function Home() {
     }));
   };
 
-  const handleSubmit = async () => {
-    try {
-      const result = await addCategory(dataCat).unwrap();
-      console.log(result);
-    } catch (err) {
-      console.log("errrrr");
-      console.log(err.data?.message);
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await logout().unwrap();
@@ -60,7 +47,7 @@ function Home() {
   return (
     <div className="custom-font">
       {/* <button onClick={handlerefresh}>refresh</button> */}
-      <input
+      {/* <input
         placeholder="name"
         value={dataCat.name}
         name="name"
@@ -71,8 +58,8 @@ function Home() {
         value={dataCat.description}
         name="description"
         onChange={handleOnChange}
-      />
-      <button onClick={handleSubmit}>Send</button>
+      /> */}
+      {/* <button onClick={handleSubmit}>Send</button> */}
       <button onClick={handleLogout}>logout</button>
       {/* <p>{data}</p> */}
     </div>
