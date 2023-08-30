@@ -23,17 +23,17 @@ function App() {
           <Route index element={<Home />} />
           <Route path="*" element={<Err404 />} />
         </Route>
-        {/* <Route element={<RequireAuth allowedRoles={["admin"]} />}> */}
-        <Route path="dashboard" element={<Dashboard />}>
-          <Route path="overview" element={<Overview />} />
-          <Route path="products" element={<Products />} />
-          <Route path="categories">
-            <Route index element={<Categories />} />
-            <Route path="addNewCategory" element={<AddNewCategory />} />
+        <Route element={<RequireAuth allowedRoles={["admin"]} />}>
+          <Route path="dashboard" element={<Dashboard />}>
+            <Route path="overview" element={<Overview />} />
+            <Route path="products" element={<Products />} />
+            <Route path="categories">
+              <Route index element={<Categories />} />
+              <Route path="addNewCategory" element={<AddNewCategory />} />
+            </Route>
+            <Route path="orders" element={<Orders />} />
           </Route>
-          <Route path="orders" element={<Orders />} />
         </Route>
-        {/* </Route> */}
         <Route
           path="auth"
           element={

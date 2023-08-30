@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
 import { AiOutlineUpload } from "react-icons/ai";
-// import { useDispatch } from "react-redux";
-// import { clearUserInfo, setUserInfo } from "../features/User/userSlice";
 
 function AddNewCategory() {
   const [dataCat, setData] = useState({
@@ -12,6 +10,7 @@ function AddNewCategory() {
     description: "",
   });
   const [addCategory] = useAddNewCategoryMutation();
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -24,11 +23,10 @@ function AddNewCategory() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(dataCat);
-      //   const result = await addCategory(dataCat).unwrap();
-      //   console.log(result);
+      const result = await addCategory(dataCat).unwrap();
+      console.log(result);
+      navigate("/dashboard/categories");
     } catch (err) {
-      console.log("errrrr");
       console.log(err.data?.message);
     }
   };
@@ -55,7 +53,7 @@ function AddNewCategory() {
             <section>
               <div
                 {...getRootProps()}
-                className="bg-stone-100 w-1/2 rounded-lg font-semibold p-6 mx-auto my-4 h-40 flex justify-center items-center border-2 border-stone-500 border-dashed"
+                className="bg-stone-100 w-1/2 rounded-lg font-semibold p-6 mx-auto my-4 h-40 flex justify-center items-center border-2 border-stone-500 border-dashed cursor-pointer"
               >
                 <input {...getInputProps()} />
                 <p className="flex">

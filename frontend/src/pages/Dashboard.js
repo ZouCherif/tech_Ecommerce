@@ -2,9 +2,11 @@ import AdminNavbar from "../components/AdminNavbar";
 import { Outlet, useLocation } from "react-router-dom";
 import { IoNotificationsOutline, IoSearchOutline } from "react-icons/io5";
 import { BsPersonCircle } from "react-icons/bs";
+import useAuth from "../hooks/useAuth";
 
 function Dashboard() {
   const location = useLocation();
+  const { username } = useAuth();
   return (
     <div className="flex bg-stone-100 h-screen">
       <AdminNavbar />
@@ -18,7 +20,7 @@ function Dashboard() {
             <IoNotificationsOutline size={20} className="mr-6" />
             <p className="text-base font-semibold flex items-center">
               <BsPersonCircle size={20} className="mr-2" />
-              Your Account
+              {username ? username : "Your Account"}
             </p>
           </div>
         </div>

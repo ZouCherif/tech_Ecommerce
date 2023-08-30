@@ -1,7 +1,9 @@
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useGetCategoriesQuery } from "../../api/apiSlice";
 
 function Categories() {
+  const { data, error, isLoading } = useGetCategoriesQuery();
   return (
     <div className="bg-white py-4 px-6 rounded-md">
       <div className="flex justify-between items-end">
@@ -24,10 +26,11 @@ function Categories() {
       <hr className="my-2" />
       <div className="text-gray-400 flex justify-around mb-2">
         <span>Category name</span>
-        <span>description</span>
+        <span>CategoryID</span>
         <span>latest change</span>
         <span>creation date</span>
       </div>
+      <div>{isLoading ? "...Loading" : data[0]._id}</div>
     </div>
   );
 }
