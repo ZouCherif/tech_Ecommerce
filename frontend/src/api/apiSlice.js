@@ -35,6 +35,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["Category"],
   endpoints: (builder) => ({
     registerNewUser: builder.mutation({
       query: (credentials) => ({
@@ -90,6 +91,7 @@ export const apiSlice = createApi({
     }),
     getCategories: builder.query({
       query: () => "/categories",
+      providesTags: ["Category"],
     }),
     addNewCategory: builder.mutation({
       query: (data) => ({
@@ -98,6 +100,7 @@ export const apiSlice = createApi({
         body: data,
         credentials: "include",
       }),
+      invalidatesTags: ["Category"],
     }),
   }),
 });
