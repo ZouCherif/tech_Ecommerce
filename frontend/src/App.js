@@ -14,6 +14,7 @@ import Products from "./pages/dashboard/Products";
 import Categories from "./pages/dashboard/Categories";
 import Orders from "./pages/dashboard/Orders";
 import AddNewCategory from "./pages/dashboard/AddNewCategory";
+import AddNewProduct from "./pages/dashboard/AddNewProduct";
 
 function App() {
   return (
@@ -26,10 +27,13 @@ function App() {
         <Route element={<RequireAuth allowedRoles={["admin"]} />}>
           <Route path="dashboard" element={<Dashboard />}>
             <Route path="overview" element={<Overview />} />
-            <Route path="products" element={<Products />} />
             <Route path="categories">
               <Route index element={<Categories />} />
               <Route path="addNewCategory" element={<AddNewCategory />} />
+            </Route>
+            <Route path="products">
+              <Route index element={<Products />} />
+              <Route path="addNewProduct" element={<AddNewProduct />} />
             </Route>
             <Route path="orders" element={<Orders />} />
           </Route>

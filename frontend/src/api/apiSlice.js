@@ -35,7 +35,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Category"],
+  tagTypes: ["Category", "Product"],
   endpoints: (builder) => ({
     registerNewUser: builder.mutation({
       query: (credentials) => ({
@@ -102,6 +102,19 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Category"],
     }),
+    getProducts: builder.query({
+      query: () => "/Products",
+      providesTags: ["Product"],
+    }),
+    addNewProduct: builder.mutation({
+      query: (data) => ({
+        url: "/products",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -116,4 +129,6 @@ export const {
 
   useGetCategoriesQuery,
   useAddNewCategoryMutation,
+  useGetProductsQuery,
+  useAddNewProductMutation,
 } = apiSlice;
