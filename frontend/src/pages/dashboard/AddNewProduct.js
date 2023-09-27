@@ -20,6 +20,7 @@ function AddNewProduct() {
   const { data, error, isLoading } = useGetCategoriesQuery();
   const [addProduct] = useAddNewProductMutation();
   const navigate = useNavigate();
+  const [sizesList, setSizeList] = useState([]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +29,14 @@ function AddNewProduct() {
       [name]: value,
     }));
   };
+
+  // const handleRemoveSize = (indexToRemove) => {
+  //   // Create a new array without the item at the specified index
+  //   const updatedSizesList = sizesList.filter(
+  //     (_, index) => index !== indexToRemove
+  //   );
+  //   setSizeList(updatedSizesList);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,6 +76,7 @@ function AddNewProduct() {
           onChange={handleOnChange}
           className="py-2 px-8 mb-2 bg-stone-100 border border-gray-300 rounded-lg text-lg font-semibold"
         >
+          <option defaultValue={true}>--</option>
           {data
             ? data.map((item) => <option>{item.name}</option>)
             : "fetshing..."}
@@ -84,8 +94,38 @@ function AddNewProduct() {
           value={dataProd.price}
           onChange={handleOnChange}
           placeholder="3000"
-          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 my-2"
+          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 mb-4 mt-2"
         />
+        <div className="mb-2">
+          <label className="font-semibold mr-4">Sizes: </label>
+          {sizesList.map((item, index) => (
+            <div className="relative inline mr-2">
+              <input
+                type="text"
+                className="bg-stone-100 border border-gray-300 rounded-lg py-2 pr-4 pl-1 w-16"
+              />
+              <button
+                onClick={() => {
+                  setSizeList((prevList) =>
+                    prevList.filter((_, i) => i !== index)
+                  );
+                }}
+                className="absolute top-0 right-1 px-1"
+              >
+                -
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={() => {
+              setSizeList((prevList) => [...prevList, ""]);
+            }}
+            type="button"
+            className="bg-stone-100 p-2 border border-gray-300 rounded-lg"
+          >
+            +
+          </button>
+        </div>
         <h2 className="font-semibold">Upload Pictures:</h2>
         <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
           {({ getRootProps, getInputProps }) => (
