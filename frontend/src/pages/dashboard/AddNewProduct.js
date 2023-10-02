@@ -30,13 +30,18 @@ function AddNewProduct() {
     }));
   };
 
-  // const handleRemoveSize = (indexToRemove) => {
-  //   // Create a new array without the item at the specified index
-  //   const updatedSizesList = sizesList.filter(
-  //     (_, index) => index !== indexToRemove
-  //   );
-  //   setSizeList(updatedSizesList);
-  // };
+  const handleMultiinput = (e, index) => {
+    const { value } = e.target;
+    setData((prevFormData) => {
+      const newSizes = [...prevFormData.sizes];
+      newSizes[index] = value;
+      return {
+        ...prevFormData,
+        sizes: newSizes,
+      };
+    });
+    console.log(dataProd);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,14 +99,18 @@ function AddNewProduct() {
           value={dataProd.price}
           onChange={handleOnChange}
           placeholder="3000"
-          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 mb-4 mt-2"
+          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-4 mb-4 mt-2 w-24"
         />
+        <span className="text-lg font-semibold">€</span>
         <div className="mb-2">
           <label className="font-semibold mr-4">Sizes: </label>
           {sizesList.map((item, index) => (
             <div className="relative inline mr-2">
               <input
                 type="text"
+                name="sizes"
+                value={dataProd.sizes[index] || ""}
+                onChange={(e) => handleMultiinput(e, index)}
                 className="bg-stone-100 border border-gray-300 rounded-lg py-2 pr-4 pl-1 w-16"
               />
               <button
@@ -109,6 +118,7 @@ function AddNewProduct() {
                   setSizeList((prevList) =>
                     prevList.filter((_, i) => i !== index)
                   );
+                  console.log(sizesList);
                 }}
                 className="absolute top-0 right-1 px-1"
               >
@@ -119,6 +129,7 @@ function AddNewProduct() {
           <button
             onClick={() => {
               setSizeList((prevList) => [...prevList, ""]);
+              console.log(sizesList);
             }}
             type="button"
             className="bg-stone-100 p-2 border border-gray-300 rounded-lg"
