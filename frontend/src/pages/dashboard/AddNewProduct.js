@@ -21,6 +21,7 @@ function AddNewProduct() {
   const [addProduct] = useAddNewProductMutation();
   const navigate = useNavigate();
   const [sizesList, setSizeList] = useState([]);
+  const [colorsList, setColorsList] = useState([]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -31,13 +32,13 @@ function AddNewProduct() {
   };
 
   const handleMultiinput = (e, index) => {
-    const { value } = e.target;
+    const { value, name } = e.target;
     setData((prevFormData) => {
-      const newSizes = [...prevFormData.sizes];
+      const newSizes = [...prevFormData?.[name]];
       newSizes[index] = value;
       return {
         ...prevFormData,
-        sizes: newSizes,
+        [name]: newSizes,
       };
     });
     console.log(dataProd);
@@ -130,6 +131,41 @@ function AddNewProduct() {
             onClick={() => {
               setSizeList((prevList) => [...prevList, ""]);
               console.log(sizesList);
+            }}
+            type="button"
+            className="bg-stone-100 p-2 border border-gray-300 rounded-lg"
+          >
+            +
+          </button>
+        </div>
+        <div className="mb-2">
+          <label className="font-semibold mr-4">Colors: </label>
+          {colorsList.map((item, index) => (
+            <div className="relative inline mr-2">
+              <input
+                type="text"
+                name="colors"
+                value={dataProd.colors[index] || ""}
+                onChange={(e) => handleMultiinput(e, index)}
+                className="bg-stone-100 border border-gray-300 rounded-lg py-2 pr-4 pl-1 w-24"
+              />
+              <button
+                onClick={() => {
+                  setColorsList((prevList) =>
+                    prevList.filter((_, i) => i !== index)
+                  );
+                  console.log(colorsList);
+                }}
+                className="absolute top-0 right-1 px-1"
+              >
+                -
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={() => {
+              setColorsList((prevList) => [...prevList, ""]);
+              console.log(colorsList);
             }}
             type="button"
             className="bg-stone-100 p-2 border border-gray-300 rounded-lg"
