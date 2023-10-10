@@ -5,6 +5,7 @@ import { useState } from "react";
 
 function Products() {
   const { data, error, isLoading } = useGetProductsQuery();
+  const [searchQuery, setSearchQuery] = useState("");
   const filteredData = data
     ? data.filter(
         (item) =>
@@ -20,8 +21,8 @@ function Products() {
           <input
             type="text"
             placeholder="Search categories..."
-            // value={searchQuery}
-            // onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6"
           />
           <Link

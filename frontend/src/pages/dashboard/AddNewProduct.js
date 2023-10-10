@@ -173,6 +173,20 @@ function AddNewProduct() {
             +
           </button>
         </div>
+        <label htmlFor="Stock" className="font-semibold mr-4">
+          {" "}
+          Stock :
+        </label>
+        <input
+          type="text"
+          name="stock"
+          id="Stock"
+          required
+          value={dataProd.stock}
+          onChange={handleOnChange}
+          placeholder="10"
+          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-4 mb-4 mt-2 w-24"
+        />
         <h2 className="font-semibold">Upload Pictures:</h2>
         <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
           {({ getRootProps, getInputProps }) => (
@@ -204,7 +218,6 @@ function AddNewProduct() {
           placeholder="Describe your category here"
           className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 my-2 h-52"
         />
-
         <button
           type="submit"
           className="bg-green-400 p-2 text-sm rounded-lg flex items-center whitespace-nowrap hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 ml-auto"
