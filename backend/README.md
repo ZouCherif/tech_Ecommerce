@@ -149,3 +149,5 @@ const userid = payload['sub'];
 verify().catch(console.error);
 
 handle when user register with google after he use normal auth
+
+migrating the projetcts to a tech store instead of clothing

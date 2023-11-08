@@ -20,7 +20,6 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    sizes: [String],
     colors: [String],
     stock: { type: Number, required: true, default: 0, min: 0 },
   },

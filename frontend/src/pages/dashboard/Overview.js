@@ -68,7 +68,7 @@ function Overview() {
             Total Sales
           </h2>
           <div className="flex justify-between items-start ">
-            <p className="px-2 text-3xl font-bold">$1815.154</p>
+            <p className="px-2 text-3xl font-bold">$18150.154</p>
             <LineChart width={70} height={50} data={data}>
               <Line
                 type="monotone"

@@ -4,7 +4,7 @@ const Category = require("../models/Category");
 const getAllProducts = async (req, res) => {
   try {
     //for pagination i have to add  page and pageSize to req.query
-    const { category, minPrice, maxPrice, size, color, search } = req.query;
+    const { category, minPrice, maxPrice, color, search } = req.query;
 
     const filter = {};
 
@@ -20,10 +20,6 @@ const getAllProducts = async (req, res) => {
       filter.price = { $lte: Number(maxPrice) };
     }
 
-    if (size) {
-      filter.sizes = size;
-    }
-
     if (color) {
       filter.colors = color;
     }
@@ -36,30 +32,6 @@ const getAllProducts = async (req, res) => {
         { description: { $regex: regexSearch } },
       ];
     }
-
-    // const currentPage = parseInt(page) || 1;
-    // const pageSizeLimit = 50; // You can set a maximum limit for the pageSize
-
-    // const productsCount = await Product.countDocuments(filter);
-
-    // const pageSize = parseInt(pageSize) || 10;
-    // const totalPages = Math.ceil(productsCount / pageSize);
-
-    // if (currentPage > totalPages) {
-    //   return res.status(404).json({ message: "Page not found." });
-    // }
-
-    // const products = await Product.find(filter)
-    //   .skip((currentPage - 1) * pageSize)
-    //   .limit(pageSize);
-
-    // res.json({
-    //   currentPage,
-    //   pageSize,
-    //   totalPages,
-    //   totalProducts: productsCount,
-    //   products,
-    // });
 
     const products = await Product.find(filter);
 
@@ -87,9 +59,8 @@ const getAllProducts = async (req, res) => {
 // };
 
 const addNewProduct = async (req, res) => {
-  const { name, description, price, categoryName, sizes, colors, stock } =
-    req.body;
-  if (!name || !description || !price || !categoryName || !sizes || !colors)
+  const { name, description, price, categoryName, colors, stock } = req.body;
+  if (!name || !description || !price || !categoryName || !colors)
     return res.status(400).json({ message: "all informations are required" });
   try {
     const category = await Category.findOne({ name: categoryName }).exec();
@@ -100,7 +71,6 @@ const addNewProduct = async (req, res) => {
       description,
       price,
       category: category._id,
-      sizes,
       colors,
       stock,
     });
@@ -111,9 +81,8 @@ const addNewProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  const { name, description, price, categoryName, sizes, colors, stock } =
-    req.body;
-  if (!name || !description || !price || !categoryName || !sizes || !colors)
+  const { name, description, price, categoryName, sizes, stock } = req.body;
+  if (!name || !description || !price || !categoryName || !sizes)
     return res.status(400).json({ message: "All information is required." });
   try {
     const product = await Product.findOne({ _id: req.params.id }).exec();
@@ -127,7 +96,6 @@ const updateProduct = async (req, res) => {
     product.price = price;
     product.category = category._id;
     product.sizes = sizes;
-    product.colors = colors;
     product.stock = stock;
     const result = await product.save();
     res.status(200).json(result);
