@@ -59,8 +59,9 @@ const getAllProducts = async (req, res) => {
 // };
 
 const addNewProduct = async (req, res) => {
-  const { name, description, price, categoryName, colors, stock } = req.body;
-  if (!name || !description || !price || !categoryName || !colors)
+  const { name, description, price, categoryName, colors, TotalStock } =
+    req.body;
+  if (!name || !description || !price || !categoryName)
     return res.status(400).json({ message: "all informations are required" });
   try {
     const category = await Category.findOne({ name: categoryName }).exec();
@@ -72,7 +73,7 @@ const addNewProduct = async (req, res) => {
       price,
       category: category._id,
       colors,
-      stock,
+      TotalStock,
     });
     res.status(200).json(result);
   } catch (err) {
@@ -81,7 +82,8 @@ const addNewProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  const { name, description, price, categoryName, sizes, stock } = req.body;
+  const { name, description, price, categoryName, colors, TotalStock } =
+    req.body;
   if (!name || !description || !price || !categoryName || !sizes)
     return res.status(400).json({ message: "All information is required." });
   try {
@@ -95,8 +97,8 @@ const updateProduct = async (req, res) => {
     product.description = description;
     product.price = price;
     product.category = category._id;
-    product.sizes = sizes;
-    product.stock = stock;
+    product.colors = colors;
+    product.TotalStock = TotalStock;
     const result = await product.save();
     res.status(200).json(result);
   } catch (err) {

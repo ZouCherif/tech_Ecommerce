@@ -14,11 +14,12 @@ function AddNewProduct() {
     price: "",
     categoryName: "",
     colors: [],
-    stock: "",
+    TotalStock: "",
   });
   const { data, error, isLoading } = useGetCategoriesQuery();
   const [addProduct] = useAddNewProductMutation();
   const navigate = useNavigate();
+  const [noColors, setColors] = useState(false);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -114,9 +115,29 @@ function AddNewProduct() {
           className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus-ring-indigo-300 mr-4 mb-4 mt-2 w-24"
         />
         <span className="text-lg font-semibold">€</span>
-
-        <div className="mb-2 flex">
-          <label className="font-semibold mr-4">Colors: </label>
+        <div className="mb-2">
+          <input
+            type="checkbox"
+            id="AddColors"
+            className="mr-2"
+            onChange={() => {
+              setColors(!noColors);
+              setData((prevFormData) => ({
+                ...prevFormData,
+                colors: [],
+              }));
+            }}
+          />
+          <label htmlFor="AddColors" className="text-lg">
+            Is there multiple colors for this product?
+          </label>
+        </div>
+        <div
+          className={`mb-2 flex ${
+            noColors ? "" : "pointer-events-none opacity-40"
+          }`}
+        >
+          <label className="font-semibold mr-4 mt-2">Colors: </label>
           {dataProd.colors.map((color, index) => (
             <div key={index} className="relative flex flex-col mr-2">
               <input
@@ -151,16 +172,16 @@ function AddNewProduct() {
             +
           </button>
         </div>
-        <label htmlFor="Stock" className="font-semibold mr-4">
+        <label htmlFor="TotalStock" className="font-semibold mr-4">
           {" "}
           Total stock :
         </label>
         <input
           type="text"
-          name="stock"
-          id="Stock"
+          name="TotalStock"
+          id="TotalStock"
           required
-          value={dataProd.stock}
+          value={dataProd.TotalStock}
           onChange={handleOnChange}
           placeholder="10"
           className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus-ring-indigo-300 mr-4 mb-4 mt-2 w-24"
