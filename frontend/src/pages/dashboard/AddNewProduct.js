@@ -13,15 +13,12 @@ function AddNewProduct() {
     description: "",
     price: "",
     categoryName: "",
-    sizes: [],
     colors: [],
     stock: "",
   });
   const { data, error, isLoading } = useGetCategoriesQuery();
   const [addProduct] = useAddNewProductMutation();
   const navigate = useNavigate();
-  const [sizesList, setSizeList] = useState([]);
-  const [colorsList, setColorsList] = useState([]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -31,17 +28,31 @@ function AddNewProduct() {
     }));
   };
 
-  const handleMultiinput = (e, index) => {
-    const { value, name } = e.target;
-    setData((prevFormData) => {
-      const newSizes = [...prevFormData?.[name]];
-      newSizes[index] = value;
-      return {
-        ...prevFormData,
-        [name]: newSizes,
-      };
-    });
+  const handleMultiinput = (e, index, fieldName) => {
+    const { value } = e.target;
+    const newColors = [...dataProd.colors];
+    newColors[index][fieldName] = value;
+    setData((prevFormData) => ({
+      ...prevFormData,
+      colors: newColors,
+    }));
     console.log(dataProd);
+  };
+
+  const handleAddColor = () => {
+    setData((prevFormData) => ({
+      ...prevFormData,
+      colors: [...prevFormData.colors, { color: "", stock: "" }],
+    }));
+  };
+
+  const handleDeleteColor = (index) => {
+    const newColors = [...dataProd.colors];
+    newColors.splice(index, 1);
+    setData((prevFormData) => ({
+      ...prevFormData,
+      colors: newColors,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -70,7 +81,7 @@ function AddNewProduct() {
           value={dataProd.name}
           onChange={handleOnChange}
           placeholder="T-shirts, Shoes..."
-          className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 mb-4 mt-2"
+          className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus-ring-indigo-300 mr-6 mb-4 mt-2"
         />
         <label htmlFor="CatList" className="font-semibold mr-4">
           {" "}
@@ -84,8 +95,8 @@ function AddNewProduct() {
         >
           <option defaultValue={true}>--</option>
           {data
-            ? data.map((item) => <option>{item.name}</option>)
-            : "fetshing..."}
+            ? data.map((item) => <option key={item.id}>{item.name}</option>)
+            : "fetching..."}
         </select>
         <br />
         <label htmlFor="Price" className="font-semibold mr-4">
@@ -100,62 +111,32 @@ function AddNewProduct() {
           value={dataProd.price}
           onChange={handleOnChange}
           placeholder="3000"
-          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-4 mb-4 mt-2 w-24"
+          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus-ring-indigo-300 mr-4 mb-4 mt-2 w-24"
         />
         <span className="text-lg font-semibold">€</span>
-        <div className="mb-2">
-          <label className="font-semibold mr-4">Sizes: </label>
-          {sizesList.map((item, index) => (
-            <div className="relative inline mr-2">
-              <input
-                type="text"
-                name="sizes"
-                value={dataProd.sizes[index] || ""}
-                onChange={(e) => handleMultiinput(e, index)}
-                className="bg-stone-100 border border-gray-300 rounded-lg py-2 pr-4 pl-1 w-16"
-              />
-              <button
-                onClick={() => {
-                  setSizeList((prevList) =>
-                    prevList.filter((_, i) => i !== index)
-                  );
-                  console.log(sizesList);
-                }}
-                className="absolute top-0 right-1 px-1"
-              >
-                -
-              </button>
-            </div>
-          ))}
-          <button
-            onClick={() => {
-              setSizeList((prevList) => [...prevList, ""]);
-              console.log(sizesList);
-            }}
-            type="button"
-            className="bg-stone-100 p-2 border border-gray-300 rounded-lg"
-          >
-            +
-          </button>
-        </div>
-        <div className="mb-2">
+
+        <div className="mb-2 flex">
           <label className="font-semibold mr-4">Colors: </label>
-          {colorsList.map((item, index) => (
-            <div className="relative inline mr-2">
+          {dataProd.colors.map((color, index) => (
+            <div key={index} className="relative flex flex-col mr-2">
               <input
                 type="text"
-                name="colors"
-                value={dataProd.colors[index] || ""}
-                onChange={(e) => handleMultiinput(e, index)}
+                name="color"
+                placeholder="black"
+                value={color.color}
+                onChange={(e) => handleMultiinput(e, index, "color")}
                 className="bg-stone-100 border border-gray-300 rounded-lg py-2 pr-4 pl-1 w-24"
               />
+              <input
+                type="text"
+                name="stock"
+                placeholder="stock"
+                value={color.stock}
+                onChange={(e) => handleMultiinput(e, index, "stock")}
+                className="bg-stone-100 border border-gray-300 rounded-lg py-2 pr-4 pl-1 w-20 mt-2"
+              />
               <button
-                onClick={() => {
-                  setColorsList((prevList) =>
-                    prevList.filter((_, i) => i !== index)
-                  );
-                  console.log(colorsList);
-                }}
+                onClick={() => handleDeleteColor(index)}
                 className="absolute top-0 right-1 px-1"
               >
                 -
@@ -163,10 +144,7 @@ function AddNewProduct() {
             </div>
           ))}
           <button
-            onClick={() => {
-              setColorsList((prevList) => [...prevList, ""]);
-              console.log(colorsList);
-            }}
+            onClick={handleAddColor}
             type="button"
             className="bg-stone-100 p-2 border border-gray-300 rounded-lg"
           >
@@ -175,7 +153,7 @@ function AddNewProduct() {
         </div>
         <label htmlFor="Stock" className="font-semibold mr-4">
           {" "}
-          Stock :
+          Total stock :
         </label>
         <input
           type="text"
@@ -185,7 +163,7 @@ function AddNewProduct() {
           value={dataProd.stock}
           onChange={handleOnChange}
           placeholder="10"
-          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-4 mb-4 mt-2 w-24"
+          className="py-2 px-3 text-gray-700 focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus-ring-indigo-300 mr-4 mb-4 mt-2 w-24"
         />
         <h2 className="font-semibold">Upload Pictures:</h2>
         <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
@@ -206,7 +184,7 @@ function AddNewProduct() {
         </Dropzone>
         <label htmlFor="Description" className="font-semibold">
           {" "}
-          Descrption:
+          Description:
         </label>
         <textarea
           type="text"
@@ -216,13 +194,12 @@ function AddNewProduct() {
           value={dataProd.description}
           onChange={handleOnChange}
           placeholder="Describe your category here"
-          className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus:ring-indigo-300 mr-6 my-2 h-52"
+          className="py-2 px-3 pr-10 text-gray-700 w-full focus:outline-none bg-stone-100 border border-gray-300 rounded-lg transition-all duration-300 focus:ring-2 focus-ring-indigo-300 mr-6 my-2 h-52"
         />
         <button
           type="submit"
-          className="bg-green-400 p-2 text-sm rounded-lg flex items-center whitespace-nowrap hover:bg-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 ml-auto"
+          className="bg-green-400 p-2 text-sm rounded-lg flex items-center whitespace-nowrap hover-bg-green-500 focus-ring-2 focus-ring-green-500 focus-ring-opacity-50 ml-auto"
         >
-          {/* <MdOutlineLibraryAdd size={15} className="mr-2" /> */}
           Add New Product
         </button>
       </form>
