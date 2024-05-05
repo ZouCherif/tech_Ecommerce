@@ -123,31 +123,4 @@ pegination
 sorting products
 Reviews and Ratings
 
-in verify role and verifyJWT
-// const authHeader = req.headers.authorization || req.headers.Authorization;
-// if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
-// const token = authHeader.split(" ")[1];
 
-tasks:
-dont forget to return delay of acces token to 15min
-delete profile apis or not?
-
-const {OAuth2Client} = require('google-auth-library');
-const client = new OAuth2Client();
-async function verify() {
-const ticket = await client.verifyIdToken({
-idToken: token,
-audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-// Or, if multiple clients access the backend:
-//[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-});
-const payload = ticket.getPayload();
-const userid = payload['sub'];
-// If request specified a G Suite domain:
-// const domain = payload['hd'];
-}
-verify().catch(console.error);
-
-handle when user register with google after he use normal auth
-
-migrating the projetcts to a tech store instead of clothing
